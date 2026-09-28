@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'FAQ - Authentic Foger Vapes Support & Shipping Info',
-  description: 'Find answers to common questions about Foger Bit 35K, Switch Pro, shipping times, and authenticity verification from an authorized Foger distributor.',
-  keywords: ['Foger FAQ', 'Foger shipping', 'Foger authenticity', 'Foger Bit 35K help', 'Foger Switch Pro support'],
+  title: 'FAQ | Authentic Foger Vapes Support & Shipping Info',
+  description: 'Find answers to common questions about Foger Bit 35K, Switch Pro, shipping times, and foger vape flavors. Authorized Foger distributor support.',
+  keywords: ['foger vape', 'foger faq', 'foger shipping', 'foger authenticity', 'foger vape flavors', 'foger vape refill'],
 };
 
 const faqs = [

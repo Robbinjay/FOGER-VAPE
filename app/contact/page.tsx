@@ -2,9 +2,9 @@ import { Metadata } from 'next';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact Us - Authorized Foger Vape Distributor Support',
-  description: 'Need help with your Foger Bit 35K or Switch Pro order? Contact our support team for wholesale inquiries, product support, and general questions.',
-  keywords: ['Foger contact', 'Foger support', 'Foger wholesale', 'Foger distributor contact'],
+  title: 'Contact Us | Authorized Foger Vape Distributor Support',
+  description: 'Need help with your Foger Bit 35K or Switch Pro order? Contact our support team for wholesale inquiries, product support, and general questions. Your trusted source for authentic foger vapes.',
+  keywords: ['foger vape', 'foger support', 'foger wholesale', 'foger distributor contact', 'foger vape near me'],
 };
 
 export default function ContactPage() {

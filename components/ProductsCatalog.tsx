@@ -147,7 +147,7 @@ export function ProductsCatalog({ initialProducts }: ProductsCatalogProps) {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/10 text-yellow-400 text-xs font-black tracking-widest uppercase mb-3">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Official Foger Product Catalog</span>
+              <span>Authentic Foger Product Catalog</span>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter uppercase leading-none">
               {selectedCategory === 'All' 
@@ -165,12 +165,12 @@ export function ProductsCatalog({ initialProducts }: ProductsCatalogProps) {
                 ? 'Shop all 54 authentic 30,000 puff magnetic replacement pods for the Foger Switch Pro ecosystem.'
                 : selectedCategory === 'Accessories'
                 ? selectedSubcategory === 'Switch Pro Battery'
-                  ? 'Official Foger Switch Pro 1200mAh reusable charging docks with USB-C fast charging, overcharging protection, and encrypted pod recognition.'
+                  ? 'Authentic Foger Switch Pro 1200mAh reusable charging docks with USB-C fast charging, overcharging protection, and encrypted pod recognition.'
                   : selectedSubcategory === 'Chargers & Cables'
-                  ? 'Official Foger 25W Dual Port wall adapters, heavy-duty nylon braided Type-C cables, and 4-pin magnetic dock chargers.'
+                  ? 'Authentic Foger 25W Dual Port wall adapters, heavy-duty nylon braided Type-C cables, and 4-pin magnetic dock chargers.'
                   : selectedSubcategory === 'Foger Flavor Drops'
-                  ? 'Official Foger concentrated 30ml flavor drops formulated to boost sweetness, icy menthol freeze, sour punch, or tropical fruit notes.'
-                  : 'Official Foger Switch Pro 1200mAh smart batteries, chargers, braided cables, flavor drops, and accessories.'
+                  ? 'Authentic Foger concentrated 30ml flavor drops formulated to boost sweetness, icy menthol freeze, sour punch, or tropical fruit notes.'
+                  : 'Authentic Foger Switch Pro 1200mAh smart batteries, chargers, braided cables, flavor drops, and accessories.'
                 : 'Browse our complete selection of authentic Foger hardware, long-lasting disposable vapes, and reusable kits.'}
             </p>
           </div>

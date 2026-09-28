@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'About Us | Authorized Foger Vape Distributor',
-  description: 'Learn about our mission as a leading distributor of authentic Foger Vape products. We provide genuine Bit 35K, Switch Pro, and accessories with fast shipping.',
+  description: 'Learn about our mission as a leading distributor of authentic Foger Vape products. We provide genuine Bit 35K, Switch Pro, and accessories with fast shipping nationwide.',
 };
 
 export default function AboutPage() {
@@ -16,8 +16,8 @@ export default function AboutPage() {
       "@type": "Organization",
       "name": "Foger Vapes Distributor",
       "description": "Authorized distributor of authentic Foger Vape products including the Bit 35K and Switch Pro series.",
-      "url": "https://fogervapes.org",
-      "logo": "https://fogervapes.org/logo.png"
+      "url": "https://foger-vapes.store",
+      "logo": "https://foger-vapes.store/logo.png"
     }
   };
 
@@ -31,7 +31,7 @@ export default function AboutPage() {
         {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-20">
           <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter uppercase leading-none">
-            Your Trusted <span className="text-[#facc15]">Foger</span> Partner
+            Authorized <span className="text-[#facc15]">Foger</span> Distributor
           </h1>
           <p className="text-xl text-gray-400 font-medium leading-relaxed">
             Leading the way in distributing authentic, high-performance Foger Vape technology across the nation.
@@ -42,8 +42,8 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
           <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(250,204,21,0.1)]">
             <Image 
-              src="https://picsum.photos/seed/fogerdistributor/1200/900" 
-              alt="Authentic Foger Vape Distribution" 
+              src="/images/foger-bit-35k.jpg" 
+              alt="Authentic Foger Vape Reseller" 
               fill 
               className="object-cover mix-blend-luminosity opacity-80"
               referrerPolicy="no-referrer"
@@ -59,14 +59,14 @@ export default function AboutPage() {
           </div>
           <div className="space-y-8">
             <div>
-              <span className="text-[#facc15] font-black tracking-widest uppercase text-sm">Who We Are</span>
-              <h2 className="text-4xl md:text-5xl font-black mt-2 mb-4 uppercase tracking-tight">Authentic Foger Distribution</h2>
+              <span className="text-[#facc15] font-black tracking-widest uppercase text-sm">Our Identity</span>
+              <h2 className="text-4xl md:text-5xl font-black mt-2 mb-4 uppercase tracking-tight">Authorized Reseller & Distributor</h2>
             </div>
             <p className="text-gray-300 font-medium text-lg leading-relaxed">
-              Welcome to your premier destination for authentic Foger Vape products. As a dedicated <strong>authorized distributor</strong>, we specialize in bringing the full lineup of genuine Foger hardware and accessories directly to you.
+              Welcome to your premier destination for authentic Foger Vape products. We are a dedicated <strong>authorized distributor and reseller</strong>, specializing in bringing the full lineup of genuine Foger hardware and accessories directly to you.
             </p>
             <p className="text-gray-300 font-medium text-lg leading-relaxed">
-              We are not the official manufacturer, but we are their most trusted distribution partner. Our mission is to ensure that every vaper has access to the cutting-edge technology that Foger is known for—without the worry of counterfeits.
+              We are not the official manufacturer, but we are a trusted distribution partner and reseller. Our mission is to ensure that every vaper has access to the cutting-edge technology that Foger is known for—without the worry of counterfeits.
             </p>
             <div className="pt-4">
               <Link href="/products" className="inline-flex items-center gap-2 bg-[#facc15] text-black px-8 py-4 rounded-full font-black text-sm uppercase tracking-wider hover:bg-[#eab308] transition-all shadow-lg shadow-yellow-400/10">
@@ -141,7 +141,7 @@ export default function AboutPage() {
                   <CheckCircle2 className="w-4 h-4 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-black uppercase text-white">Official Accessories</h4>
+                  <h4 className="font-black uppercase text-white">Authentic Accessories</h4>
                   <p className="text-gray-400 text-sm">Flavor drops, chargers, and replacement batteries for maximum longevity.</p>
                 </div>
               </div>

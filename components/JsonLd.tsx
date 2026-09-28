@@ -5,8 +5,8 @@ export default function JsonLd() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Foger Vapes Distributor",
-    "url": "https://fogervapes.org",
-    "logo": "https://fogervapes.org/logo.png",
+    "url": "https://foger-vapes.store",
+    "logo": "https://foger-vapes.store/logo.png",
     "description": "Authorized distributor of authentic Foger Vape products including Bit 35K and Switch Pro.",
     "contactPoint": {
       "@type": "ContactPoint",
@@ -25,12 +25,12 @@ export default function JsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Foger Vapes Distributor",
-    "url": "https://fogervapes.org",
+    "url": "https://foger-vapes.store",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": "https://fogervapes.org/products?search={search_term_string}"
+        "urlTemplate": "https://foger-vapes.store/products?search={search_term_string}"
       },
       "query-input": "required name=search_term_string"
     }

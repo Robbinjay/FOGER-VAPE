@@ -4,8 +4,9 @@ import { products } from '@/lib/data';
 import { ProductsCatalog } from '@/components/ProductsCatalog';
 
 export const metadata: Metadata = {
-  title: 'Shop All Vapes | Foger Bit 35K & Switch Pro Vapes',
-  description: 'Browse the full collection of 30+ Foger Bit 35K Puffs flavors, Switch Pro rechargeable kits, pods, and official accessories.',
+  title: 'Shop All Foger Vapes | Bit 35K, Switch Pro & Refill Pods',
+  description: 'Browse the full collection of 30+ Foger Bit 35K Puffs flavors, Switch Pro rechargeable kits, and Foger vape refill pods. Authorized Foger distributor.',
+  keywords: ['foger vape', 'foger vapes', 'foger vape flavors', 'foger bit 35k', 'foger switch pro', 'foger vape refill', 'foggers vape'],
 };
 
 export default function ProductsPage() {

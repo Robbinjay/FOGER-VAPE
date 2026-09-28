@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - Foger Vapes Distributor',
-  description: 'Read the terms and conditions for purchasing authentic Foger Vape products. Age verification (21+) required for all sales.',
-  keywords: ['Foger terms of service', 'vape age verification', 'Foger distributor terms'],
+  title: 'Terms of Service | Foger Vapes Distributor',
+  description: 'Read the terms and conditions for purchasing authentic Foger Vape products. Age verification (21+) required for all sales. Shop genuine foger vapes with confidence.',
+  keywords: ['foger vape', 'foger terms of service', 'vape age verification', 'foger distributor terms', 'foggers vape'],
 };
 
 export default function TermsPage() {

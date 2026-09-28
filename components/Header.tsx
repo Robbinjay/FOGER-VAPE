@@ -166,7 +166,7 @@ export function Header() {
                             <span>Accessories & Gear</span>
                           </span>
                           <span className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">
-                            15 Official Items
+                            15 Authentic Items
                           </span>
                         </div>
 
@@ -263,7 +263,7 @@ export function Header() {
                                 </span>
                               </div>
                               <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">
-                                Official silicone ring holders & neck straps
+                                Authentic silicone ring holders & neck straps
                               </p>
                             </div>
                           </Link>

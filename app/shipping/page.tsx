@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Shipping & Returns - Fast Delivery from Foger Distributor',
-  description: 'View our shipping rates, delivery times, and return policies for Foger Bit 35K and Switch Pro products. 100% satisfaction guaranteed with fast US shipping.',
-  keywords: ['Foger shipping policy', 'Foger returns', 'vape shipping US', 'Foger delivery time'],
+  title: 'Shipping & Returns | Fast Delivery from Foger Distributor',
+  description: 'View our shipping rates, delivery times, and return policies for Foger Bit 35K and Switch Pro products. Fast US shipping for all foger vapes.',
+  keywords: ['foger vape', 'foger shipping policy', 'foger returns', 'vape shipping US', 'foger delivery time', 'foger vape near me'],
 };
 
 export default function ShippingPage() {

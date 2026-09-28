@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/checkout', '/track-order'],
     },
-    sitemap: 'https://fogervapes.org/sitemap.xml',
+    sitemap: 'https://foger-vapes.store/sitemap.xml',
   };
 }

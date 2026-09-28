@@ -8,7 +8,7 @@ export function Footer() {
         <div className="space-y-6">
           <Link href="/" className="flex items-center space-x-2 text-2xl font-black text-white tracking-tighter uppercase">
             <CloudLightning className="w-8 h-8 text-[#facc15]" />
-            <span>FogerVapes</span>
+            <span>Foger Vapes</span>
           </Link>
           <p className="text-sm text-gray-400 leading-relaxed font-medium">
             Premium vaping experiences delivered straight to your door. Quality, flavor, and innovation in every puff.
@@ -59,7 +59,7 @@ export function Footer() {
         </div>
       </div>
       <div className="container mx-auto px-4 mt-16 pt-8 border-t border-white/10 text-sm text-center text-gray-500 font-medium">
-        &copy; {new Date().getFullYear()} FogerVapes.org. All rights reserved.
+        &copy; {new Date().getFullYear()} foger-vapes.store. All rights reserved.
       </div>
     </footer>
   );

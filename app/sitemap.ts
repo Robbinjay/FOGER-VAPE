@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { products } from '@/lib/data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://fogervapes.org';
+  const baseUrl = 'https://foger-vapes.store';
 
   const productUrls = products.map((product) => ({
     url: `${baseUrl}/products/${product.slug}`,

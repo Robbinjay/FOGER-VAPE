@@ -3,8 +3,9 @@ import { ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Age Verification | Foger Vapes',
-  description: 'Information regarding age verification requirements for purchasing Foger Vapes products.',
+  title: 'Age Verification | Foger Vapes 21+ Requirements',
+  description: 'Information regarding age verification requirements for purchasing authentic Foger Vape products. We strictly enforce 21+ age limits.',
+  keywords: ['foger vape', 'vape age verification', 'legal age to buy vapes', 'foger distributor rules'],
 };
 
 export default function AgeVerificationPage() {

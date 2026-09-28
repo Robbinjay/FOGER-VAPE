@@ -7,8 +7,8 @@ import { ArrowRight, ShieldCheck, Zap, Sparkles, CheckCircle2, Flame, ShoppingBa
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Foger Bit 35K & Switch Pro Distributor | Authentic Foger Vapes',
-  description: 'Authorized distributor of authentic Foger Vape products. Explore the Foger Bit 35K with 35,000 puffs and the Switch Pro 30K ecosystem. 100% genuine guaranteed.',
+  title: 'Foger Vape Distributor | Authentic Bit 35K & Switch Pro Collection',
+  description: 'Looking for a Foger Vape near me? We are the leading distributor of authentic Foger vapes, including Foger Bit 35K, Switch Pro, and Foger vape refill pods. Explore 100+ Foger vape flavors today.',
 };
 
 export default function HomePage() {
@@ -25,7 +25,7 @@ export default function HomePage() {
         <div className="flex items-center space-x-2">
           <Link href="/" className="hover:underline hover:text-black font-medium">Home</Link>
           <span className="text-gray-400">\</span>
-          <span className="text-gray-900 font-semibold">Official Foger Bit 35K & Switch Pro Collection</span>
+          <span className="text-gray-900 font-semibold">Authentic Foger Bit 35K & Switch Pro Collection</span>
         </div>
         <div className="hidden sm:flex items-center space-x-3 text-xs text-gray-500 font-medium">
           <span className="flex items-center text-emerald-600 font-bold">
@@ -214,7 +214,7 @@ export default function HomePage() {
                 Foger Switch Pro Kit 30K Lineup
               </h2>
               <p className="text-gray-400 text-sm sm:text-base font-medium mt-1">
-                Explore all 52 official flavors featuring reusable smart battery docks, magnetic lock pods, and dual power modes.
+                Explore all 52 authentic flavors featuring reusable smart battery docks, magnetic lock pods, and dual power modes.
               </p>
             </div>
 
@@ -456,6 +456,37 @@ export default function HomePage() {
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Rigorous Quality Inspection</span>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* SEO Content Section */}
+      <section className="py-16 bg-zinc-50 border-t border-gray-200">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="prose prose-zinc max-w-none">
+            <h2 className="text-2xl font-black uppercase tracking-tight mb-6">Your Premier Destination for Foger Vape Products</h2>
+            <p className="text-gray-700 leading-relaxed mb-4 font-medium">
+              Are you searching for a reliable <strong>foger vape near me</strong>? Look no further. As an authorized distributor, we provide the most comprehensive selection of authentic <strong>foger vapes</strong> available online. Whether you are a fan of the massive <Link href="/products?category=Foger+Bit+35K" className="text-black underline font-bold">Foger Bit 35K</Link> or the innovative Switch Pro system, we have exactly what you need.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-4 font-medium">
+              One of the standout features of the <strong>foger</strong> brand is the variety. With over 100 <strong>foger vape flavors</strong> ranging from refreshing fruit blends to classic menthols, there is a perfect match for every palate. Our inventory includes the latest releases, ensuring you always have access to the newest technology in the industry.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6 font-medium">
+              Maintenance is simple with our <strong>foger vape refill</strong> options. Our <Link href="/products?category=Switch+Pro+Pods" className="text-black underline font-bold">Switch Pro Pods</Link> offer a seamless way to keep your device running without the waste of traditional disposables. When you choose <strong>foggers vape</strong> products from us, you are guaranteed 100% authenticity and the best performance possible.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm font-bold uppercase tracking-wider">
+              <Link href="/products?category=Foger+Bit+35K" className="flex items-center gap-2 hover:text-yellow-600 transition-colors">
+                <div className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
+                Foger Bit 35K Flavors
+              </Link>
+              <Link href="/products?category=Foger+Switch+Pro" className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
+                <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                Switch Pro Kits
+              </Link>
+              <Link href="/products?category=Switch+Pro+Pods" className="flex items-center gap-2 hover:text-purple-600 transition-colors">
+                <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                Foger Vape Refills
+              </Link>
             </div>
           </div>
         </div>
