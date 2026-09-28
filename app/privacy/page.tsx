@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Foger Vapes',
-  description: 'Privacy Policy for Foger Vapes.',
+  title: 'Privacy Policy - Foger Vapes Distributor',
+  description: 'Learn how we protect your personal information and handle age verification data at Foger Vapes Distributor.',
+  keywords: ['Foger privacy policy', 'vape shop privacy', 'data protection'],
 };
 
 export default function PrivacyPage() {

@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'FAQ | Foger Vapes',
-  description: 'Frequently asked questions about Foger Vapes products, shipping, and returns.',
+  title: 'FAQ - Authentic Foger Vapes Support & Shipping Info',
+  description: 'Find answers to common questions about Foger Bit 35K, Switch Pro, shipping times, and authenticity verification from an authorized Foger distributor.',
+  keywords: ['Foger FAQ', 'Foger shipping', 'Foger authenticity', 'Foger Bit 35K help', 'Foger Switch Pro support'],
 };
 
 const faqs = [
@@ -33,8 +34,25 @@ const faqs = [
 ];
 
 export default function FAQPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
   return (
     <div className="bg-black min-h-screen py-24 text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter uppercase">FAQ</h1>

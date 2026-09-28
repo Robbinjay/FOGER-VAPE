@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Shipping & Returns | Foger Vapes',
-  description: 'Information about Foger Vapes shipping policies and return procedures.',
+  title: 'Shipping & Returns - Fast Delivery from Foger Distributor',
+  description: 'View our shipping rates, delivery times, and return policies for Foger Bit 35K and Switch Pro products. 100% satisfaction guaranteed with fast US shipping.',
+  keywords: ['Foger shipping policy', 'Foger returns', 'vape shipping US', 'Foger delivery time'],
 };
 
 export default function ShippingPage() {
@@ -20,7 +21,7 @@ export default function ShippingPage() {
               <p>We strive to process and ship all orders as quickly as possible. Orders are typically processed within 1-2 business days (excluding weekends and holidays) after receiving your order confirmation email.</p>
               <h3 className="text-xl font-bold text-white mt-6 mb-3 uppercase tracking-wider">Domestic Shipping Rates and Estimates</h3>
               <ul className="list-disc pl-6 space-y-2">
-                <li><strong>Standard Shipping:</strong> 3-5 business days. Free for orders over $50.</li>
+                <li><strong>Standard Shipping:</strong> 3-5 business days. Free for all orders above $200.</li>
                 <li><strong>Expedited Shipping:</strong> 2-3 business days. Rates calculated at checkout.</li>
               </ul>
               <p className="mt-4">Please note that due to PACT Act regulations, an adult signature (21+) is required upon delivery for all vaping products. A fee for this service may be applied at checkout.</p>

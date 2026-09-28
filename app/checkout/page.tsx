@@ -12,7 +12,7 @@ export default function CheckoutPage() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const tax = cartTotal * 0.08;
-  const shipping = cartTotal > 50 || cartTotal === 0 ? 0 : 5.99;
+  const shipping = cartTotal >= 200 || cartTotal === 0 ? 0 : 9.99;
   const total = cartTotal + tax + shipping;
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -2,13 +2,33 @@ import { Metadata } from 'next';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Foger Vapes',
-  description: 'Get in touch with the Foger Vapes team for support, wholesale inquiries, or general questions.',
+  title: 'Contact Us - Authorized Foger Vape Distributor Support',
+  description: 'Need help with your Foger Bit 35K or Switch Pro order? Contact our support team for wholesale inquiries, product support, and general questions.',
+  keywords: ['Foger contact', 'Foger support', 'Foger wholesale', 'Foger distributor contact'],
 };
 
 export default function ContactPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Foger Vapes Distributor",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-800-123-4567",
+        "contactType": "customer service",
+        "email": "support@fogervapes.com"
+      }
+    }
+  };
+
   return (
     <div className="bg-black min-h-screen py-24 text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter uppercase">Contact Us</h1>

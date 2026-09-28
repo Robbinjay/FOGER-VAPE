@@ -22,6 +22,7 @@ import {
   Cable,
   Droplets
 } from 'lucide-react';
+import ProductJsonLd from '@/components/ProductJsonLd';
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
@@ -36,8 +37,20 @@ export async function generateMetadata(
   }
 
   return {
-    title: `${product.name} | Official Foger Vapes`,
-    description: product.description,
+    title: `${product.name} | Authentic Foger Vape Distributor`,
+    description: `Shop the authentic ${product.name}. ${product.description} Genuine Foger products with fast shipping and guaranteed quality.`,
+    openGraph: {
+      title: `${product.name} | Authentic Foger Vape Distributor`,
+      description: product.description,
+      images: [
+        {
+          url: product.image,
+          width: 800,
+          height: 800,
+          alt: product.name,
+        },
+      ],
+    },
   };
 }
 
@@ -95,6 +108,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="bg-black min-h-screen py-10 lg:py-16 text-white">
+      <ProductJsonLd product={product} />
       <div className="container mx-auto px-4 max-w-7xl">
         
         {/* Breadcrumb Navigation */}

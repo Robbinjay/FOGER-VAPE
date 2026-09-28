@@ -57,7 +57,7 @@ export function Header() {
     <>
       {/* Top Banner */}
       <div className="bg-black text-white text-center py-2 px-4 font-bold text-xs sm:text-sm tracking-wide">
-        $9 Flat Rate Shipping or Free Shipping on Orders Over $99
+        Free shipping for all orders above $200
       </div>
       
       {/* Second Banner */}

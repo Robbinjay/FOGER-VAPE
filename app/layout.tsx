@@ -5,12 +5,58 @@ import { CartProvider } from '@/lib/cart-context';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CartDrawer } from '@/components/CartDrawer';
+import JsonLd from '@/components/JsonLd';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Foger Vapes | Premium SEO eCommerce',
-  description: 'Production-Ready SEO eCommerce Website for fogervapes.org featuring optimized product pages and lightning-fast speeds.',
+  title: {
+    default: 'Foger Vapes Distributor | Authentic Bit 35K & Switch Pro',
+    template: '%s | Foger Vapes Distributor'
+  },
+  description: 'Authorized distributor of authentic Foger Vape products. Shop the Foger Bit 35K, Switch Pro Kits, and replacement pods. 100% genuine guaranteed with fast shipping.',
+  keywords: ['Foger Vapes', 'Foger Bit 35K', 'Foger Switch Pro', 'Vape Distributor', 'Authentic Foger', 'Vape Pods', 'Disposable Vapes'],
+  authors: [{ name: 'Foger Vapes Distributor' }],
+  creator: 'Foger Vapes Distributor',
+  publisher: 'Foger Vapes Distributor',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://fogervapes.org',
+    siteName: 'Foger Vapes Distributor',
+    title: 'Foger Vapes Distributor | Authentic Bit 35K & Switch Pro',
+    description: 'Authorized distributor of authentic Foger Vape products. 100% genuine guaranteed.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Foger Vapes Distributor',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Foger Vapes Distributor | Authentic Bit 35K & Switch Pro',
+    description: 'Authorized distributor of authentic Foger Vape products. 100% genuine guaranteed.',
+    images: ['/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -22,6 +68,7 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <body className="flex flex-col min-h-screen bg-black text-white antialiased selection:bg-[#facc15] selection:text-black" suppressHydrationWarning>
         <CartProvider>
+          <JsonLd />
           <Header />
           <main className="flex-1">
             {children}

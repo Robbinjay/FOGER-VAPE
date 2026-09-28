@@ -39,7 +39,7 @@ export const SLIDES: SlideData[] = [
     subtitle: 'CLEAR TANK TELLS IT ALL',
     tagline: 'Featuring 360° Curved Screen, Dual Mesh Coils & 35,000 Massive Puffs',
     badge: 'FLAGSHIP INNOVATION • IN STOCK',
-    image: '/foger-bit-35k-banner.webp',
+    image: '/foger-bit-35k-banner.jpg',
     accentColor: '#facc15', // Gold / Yellow
     glowColor: 'rgba(250, 204, 21, 0.4)',
     specs: [
@@ -82,7 +82,7 @@ export const SLIDES: SlideData[] = [
       { label: 'NICOTINE', value: '5% Premium Salt', icon: 'zap' },
       { label: 'FLAVOR VARIETY', value: '100+ Master Blends', icon: 'sparkles' },
       { label: 'E-LIQUID', value: 'Ultra Clear Pure Tank', icon: 'flame' },
-      { label: 'SHIPPING', value: '$9 Flat / Free $99+', icon: 'rotate' },
+      { label: 'SHIPPING', value: 'Free Over $200', icon: 'rotate' },
     ],
     primaryCta: { label: 'SHOP ALL FLAVORS', href: '/products' },
     secondaryCta: { label: 'VIEW PRODUCT CATALOG', href: '/products' },

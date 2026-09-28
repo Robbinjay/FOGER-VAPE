@@ -4,6 +4,12 @@ import { RevSlider } from '@/components/RevSlider';
 import { products } from '@/lib/data';
 import ProductImage from '@/components/ProductImage';
 import { ArrowRight, ShieldCheck, Zap, Sparkles, CheckCircle2, Flame, ShoppingBag } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Foger Bit 35K & Switch Pro Distributor | Authentic Foger Vapes',
+  description: 'Authorized distributor of authentic Foger Vape products. Explore the Foger Bit 35K with 35,000 puffs and the Switch Pro 30K ecosystem. 100% genuine guaranteed.',
+};
 
 export default function HomePage() {
   // Select top featured items across the Bit 35K, Switch Pro, and popular flavors

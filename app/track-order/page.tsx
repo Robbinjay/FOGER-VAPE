@@ -2,8 +2,9 @@ import { Metadata } from 'next';
 import { PackageSearch } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Track Order | Foger Vapes',
-  description: 'Track the status of your Foger Vapes order.',
+  title: 'Track Your Order - Foger Vape Shipment Tracking',
+  description: 'Easily track your Foger Bit 35K or Switch Pro shipment. Enter your order number to see real-time updates on your delivery status.',
+  keywords: ['track Foger order', 'vape shipment tracking', 'Foger delivery status'],
 };
 
 export default function TrackOrderPage() {

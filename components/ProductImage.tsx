@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { getFlavorTheme } from '@/lib/flavor-themes';
-import { Sparkles } from 'lucide-react';
 
 interface ProductImageProps {
   src: string;
@@ -34,41 +33,27 @@ export default function ProductImage({
   sizes,
   showAura = false,
 }: ProductImageProps) {
-  const [imgSrc, setImgSrc] = useState<string>(() => {
-    if (src && !src.includes('picsum.photos')) return src;
-    // Map to clean local assets
+  const getFallbackSrc = () => {
     if (subCategory === 'Switch Pro Battery') return '/images/switch-battery.jpg';
     if (subCategory === 'Chargers & Cables') return '/images/charger-cable.jpg';
     if (subCategory === 'Foger Flavor Drops') return '/images/flavor-drops.jpg';
     if (category === 'Foger Switch Pro') return '/images/switch-pro-kit.jpg';
     if (category === 'Switch Pro Pods') return '/images/switch-pro-pod.jpg';
     return '/images/foger-bit-35k.jpg';
-  });
+  };
 
-  const [hasError, setHasError] = useState(false);
+  const initialSrc = src && !src.includes('picsum.photos') ? src : getFallbackSrc();
+  const [errorSrc, setErrorSrc] = useState<string | null>(null);
   const theme = getFlavorTheme(flavor, category);
 
+  const currentSrc = errorSrc || initialSrc;
+
   const handleError = () => {
-    if (!hasError) {
-      setHasError(true);
-      if (category === 'Foger Switch Pro') {
-        setImgSrc('/images/switch-pro-kit.jpg');
-      } else if (category === 'Switch Pro Pods') {
-        setImgSrc('/images/switch-pro-pod.jpg');
-      } else if (subCategory === 'Switch Pro Battery') {
-        setImgSrc('/images/switch-battery.jpg');
-      } else if (subCategory === 'Chargers & Cables') {
-        setImgSrc('/images/charger-cable.jpg');
-      } else if (subCategory === 'Foger Flavor Drops') {
-        setImgSrc('/images/flavor-drops.jpg');
-      } else {
-        setImgSrc('/images/foger-bit-35k.jpg');
-      }
-    }
+    setErrorSrc(getFallbackSrc());
   };
 
   return (
-    <div className={`relative flex items-center justify-center overflow-hidden ${fill ? 'w-full h-full' : ''}`}>
+    <div className="relative flex items-center justify-center overflow-hidden w-full h-full">
       {/* Dynamic Flavor Aura Glow */}
       {showAura && (
         <div
@@ -81,7 +66,7 @@ export default function ProductImage({
 
       {fill ? (
         <Image
-          src={imgSrc}
+          src={currentSrc}
           alt={alt}
           fill
           priority={priority}
@@ -92,13 +77,13 @@ export default function ProductImage({
         />
       ) : (
         <Image
-          src={imgSrc}
+          src={currentSrc}
           alt={alt}
           width={width || 300}
           height={height || 300}
           priority={priority}
           onError={handleError}
-          className={`object-contain transition-transform duration-500 relative z-10 ${className}`}
+          className={`w-full h-full max-w-full max-h-full object-contain transition-transform duration-500 relative z-10 ${className}`}
           referrerPolicy="no-referrer"
         />
       )}
