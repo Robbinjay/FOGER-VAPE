@@ -86,8 +86,10 @@ export async function POST(req: NextRequest) {
       },
       shippingMethod: {
         id: shippingMethod?.id || 'normal',
-        name: shippingMethod?.name || 'Normal Shipping',
-        price: Number(shippingMethod?.price) || 0,
+        name: shippingMethod?.name || (shippingMethod?.id === 'express' ? 'Express Shipping' : shippingMethod?.id === 'same-day' ? 'Ultra Fast Same Day Shipping' : 'Standard Shipping (Normal)'),
+        price: (shippingMethod?.id === 'normal' && subtotal >= 200.0) 
+          ? 0 
+          : (Number(shippingMethod?.price) || (shippingMethod?.id === 'express' ? 30.0 : shippingMethod?.id === 'same-day' ? 70.0 : shippingMethod?.id === 'international' ? 40.0 : 9.99)),
       },
       paymentMethod: {
         type: paymentMethod.type,

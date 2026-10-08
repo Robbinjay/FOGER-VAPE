@@ -30,7 +30,7 @@ export default function ShippingPage() {
               <div className="p-4 bg-zinc-900 rounded-2xl border border-zinc-800">
                 <span className="text-xs uppercase font-black text-emerald-400 block mb-1">Free Shipping Perk</span>
                 <span className="text-xl font-black text-white">Orders Over $200.00</span>
-                <p className="text-xs text-gray-400 mt-1">Free Normal Shipping ($9.99 value) is automatically applied when cart subtotal reaches $200.</p>
+                <p className="text-xs text-gray-400 mt-1">Free Standard Shipping ($9.99 value) is automatically applied when cart subtotal reaches $200. Express, International, and Ultra Fast shipping remain at regular rates.</p>
               </div>
             </div>
           </section>
@@ -41,7 +41,7 @@ export default function ShippingPage() {
             <div className="space-y-3">
               <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800 flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-white text-sm uppercase">Normal Shipping</h4>
+                  <h4 className="font-bold text-white text-sm uppercase">Standard Shipping (Normal)</h4>
                   <p className="text-xs text-gray-400">Standard carrier transit (3-5 business days)</p>
                 </div>
                 <div className="text-right">

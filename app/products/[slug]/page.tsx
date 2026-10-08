@@ -140,9 +140,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           
           {/* Product Image Stage */}
           <div className="space-y-6 lg:sticky lg:top-28">
-            <div className="relative aspect-square bg-zinc-950 rounded-3xl overflow-hidden border border-zinc-800 flex items-center justify-center p-8 shadow-2xl">
+            <div className="relative aspect-square w-full bg-zinc-950 rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl flex items-center justify-center p-6 sm:p-10">
               {/* Puff / Badge Overlay */}
-              <div className="absolute top-4 left-4 z-20 flex flex-wrap items-center gap-2">
+              <div className="absolute top-4 left-4 z-30 flex flex-wrap items-center gap-2">
                 <span className="text-black font-black tracking-wider uppercase text-xs bg-[#facc15] px-3.5 py-1.5 rounded-full shadow-lg">
                   {product.subCategory || product.category}
                 </span>
@@ -154,25 +154,27 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </div>
 
               {/* In Stock Badge */}
-              <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full text-xs font-black uppercase">
+              <div className="absolute top-4 right-4 z-30 flex items-center gap-1.5 bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full text-xs font-black uppercase">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span>In Stock</span>
               </div>
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none z-20" />
               
-              <ProductImage 
-                src={product.image} 
-                alt={product.name}
-                flavor={product.flavor}
-                category={product.category}
-                subCategory={product.subCategory}
-                width={550}
-                height={550}
-                showAura={true}
-                className="max-h-[85%]"
-                priority
-              />
+              <div className="relative w-full h-full flex items-center justify-center">
+                <ProductImage 
+                  src={product.image} 
+                  alt={product.name}
+                  flavor={product.flavor}
+                  category={product.category}
+                  subCategory={product.subCategory}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  showAura={true}
+                  className="p-4 sm:p-8"
+                  priority
+                />
+              </div>
             </div>
 
             {/* Quick Specs Grid */}
@@ -272,7 +274,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </span>
               )}
               <span className="text-xs text-gray-400 font-semibold uppercase tracking-wider">
-                Normal $9.99 • Free on $200+ • Same-Day & Express Available
+                Standard $9.99 (Free on $200+) • Express $30 • Ultra Fast $70
               </span>
             </div>
             
@@ -618,17 +620,17 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   href={`/products/${rel.slug}`}
                   className="group bg-zinc-950 rounded-2xl border border-zinc-800 p-5 hover:border-yellow-400/60 transition-all duration-300 flex flex-col hover:-translate-y-1"
                 >
-                  <div className="aspect-square bg-zinc-900/60 rounded-xl p-4 flex items-center justify-center mb-4 overflow-hidden">
+                  <div className="aspect-square relative bg-zinc-900/60 rounded-xl p-3 flex items-center justify-center mb-4 overflow-hidden">
                     <ProductImage
                       src={rel.image}
                       alt={rel.name}
                       flavor={rel.flavor}
                       category={rel.category}
                       subCategory={rel.subCategory}
-                      width={200}
-                      height={200}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 25vw"
                       showAura={true}
-                      className="group-hover:scale-105"
+                      className="p-2 group-hover:scale-105"
                     />
                   </div>
                   <h4 className="text-sm font-black text-white group-hover:text-yellow-400 uppercase tracking-tight line-clamp-1 mb-1">

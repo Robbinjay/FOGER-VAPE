@@ -39,15 +39,15 @@ interface ShippingOption {
 const SHIPPING_TIERS: ShippingOption[] = [
   {
     id: 'normal',
-    name: 'Normal Shipping',
-    description: 'Standard carrier dispatch (3-5 business days)',
+    name: 'Standard Shipping (Normal)',
+    description: 'Standard carrier ground transit (3-5 business days). Eligible for FREE shipping on orders over $200.',
     basePrice: 9.99,
     icon: Truck,
   },
   {
     id: 'express',
     name: 'Express Shipping',
-    description: 'Expedited air priority handling (1-2 business days)',
+    description: 'Expedited air priority handling (1-2 business days). Flat rate $30.00 (Exempt from free shipping waiver).',
     basePrice: 30.00,
     icon: Zap,
     badge: 'Popular',
@@ -55,14 +55,14 @@ const SHIPPING_TIERS: ShippingOption[] = [
   {
     id: 'international',
     name: 'International Shipping',
-    description: 'Worldwide tracked door-to-door delivery',
+    description: 'Worldwide tracked door-to-door delivery. Flat rate $40.00 (Exempt from free shipping waiver).',
     basePrice: 40.00,
     icon: Globe,
   },
   {
     id: 'same-day',
     name: 'Ultra Fast Same Day Shipping',
-    description: 'Priority warehouse processing & immediate courier dispatch',
+    description: 'Priority warehouse processing & immediate courier dispatch. Flat rate $70.00 (Exempt from free shipping waiver).',
     basePrice: 70.00,
     icon: Clock,
     badge: '⚡ Ultra Fast',
@@ -119,8 +119,12 @@ export default function CheckoutPage() {
 
   const currentShippingOption = SHIPPING_TIERS.find((s) => s.id === selectedShippingId) || SHIPPING_TIERS[0];
   
-  // Normal Shipping is $0 if subtotal >= $200
-  const shippingFee = (currentShippingOption.id === 'normal' && isFreeShippingEligible) 
+  // Free shipping ($200+ subtotal) is strictly available ONLY for Standard/Normal shipping ($9.99 waived).
+  // Express ($30.00), International ($40.00), and Ultra Fast Same Day ($70.00) are NEVER free.
+  const isStandardShipping = currentShippingOption.id === 'normal';
+  const isFreeShippingApplied = isStandardShipping && isFreeShippingEligible;
+  
+  const shippingFee = isFreeShippingApplied 
     ? 0 
     : currentShippingOption.basePrice;
 
@@ -430,7 +434,7 @@ export default function CheckoutPage() {
             <div className="flex items-center gap-2.5 text-gray-300">
               <Truck className="w-4 h-4 text-emerald-400" />
               <span>
-                Add <strong>${(FREE_SHIPPING_THRESHOLD - cartTotal).toFixed(2)}</strong> more to unlock <strong>FREE Normal Shipping</strong>!
+                Add <strong>${(FREE_SHIPPING_THRESHOLD - cartTotal).toFixed(2)}</strong> more to unlock <strong>FREE Standard Shipping</strong>!
               </span>
             </div>
             <Link href="/products" className="text-yellow-400 font-bold hover:underline">
@@ -443,7 +447,7 @@ export default function CheckoutPage() {
           <div className="mb-8 p-4 bg-emerald-950/40 border border-emerald-500/30 rounded-2xl flex items-center gap-2.5 text-xs text-emerald-300">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              <strong>Free Shipping Unlocked!</strong> Your order qualifies for free Normal Shipping ($9.99 waived).
+              <strong>Free Shipping Unlocked!</strong> Your order qualifies for free <strong>Standard Shipping</strong> ($9.99 waived). Express and Ultra Fast shipping remain available at their regular rates.
             </span>
           </div>
         )}
@@ -637,7 +641,7 @@ export default function CheckoutPage() {
                     </h2>
                   </div>
                   <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
-                    {isFreeShippingEligible ? 'Free Normal Shipping Active' : 'Calculated at Checkout'}
+                    {isFreeShippingEligible ? 'Free Standard Shipping Unlocked ($200+)' : 'Free Standard Shipping on $200+'}
                   </span>
                 </div>
 
@@ -647,8 +651,9 @@ export default function CheckoutPage() {
                     const tierIcon = tier.icon;
                     const IconComponent = tierIcon;
 
-                    // Calculate price based on free shipping rule
-                    const effectivePrice = (tier.id === 'normal' && isFreeShippingEligible) ? 0 : tier.basePrice;
+                    // Free shipping strictly applies to Standard/Normal shipping only, never Express, International, or Ultra
+                    const isTierStandard = tier.id === 'normal';
+                    const effectivePrice = (isTierStandard && isFreeShippingEligible) ? 0 : tier.basePrice;
 
                     return (
                       <div
@@ -1003,7 +1008,7 @@ export default function CheckoutPage() {
                   <span>Shipping ({currentShippingOption.name})</span>
                   <span className="font-bold text-white">
                     {shippingFee === 0 ? (
-                      <span className="text-emerald-400 font-extrabold">FREE ($200+)</span>
+                      <span className="text-emerald-400 font-extrabold">FREE ($200+ Standard Waiver)</span>
                     ) : (
                       `$${shippingFee.toFixed(2)}`
                     )}

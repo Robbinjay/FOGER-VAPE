@@ -60,13 +60,13 @@ export function CartDrawer() {
                   <div className="flex items-center gap-2 text-emerald-300 font-semibold">
                     <Truck className="w-4 h-4 shrink-0 text-emerald-400" />
                     <span>
-                      Add <strong>${(FREE_SHIPPING_THRESHOLD - cartTotal).toFixed(2)}</strong> more for <strong>FREE Normal Shipping</strong>!
+                      Add <strong>${(FREE_SHIPPING_THRESHOLD - cartTotal).toFixed(2)}</strong> more for <strong>FREE Standard Shipping</strong>!
                     </span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-2 text-emerald-300 font-semibold">
                     <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                    <span>You unlocked <strong>FREE Normal Shipping</strong> ($9.99 waived)!</span>
+                    <span>You unlocked <strong>FREE Standard Shipping</strong> ($9.99 waived)!</span>
                   </div>
                 )}
               </div>

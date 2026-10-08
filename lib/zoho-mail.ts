@@ -194,7 +194,7 @@ function generateClientEmailHtml(order: OrderDetails, storeName: string): string
           <tr>
             <td style="color: #6b7280; padding: 6px 0;">${order.shippingMethod.name}:</td>
             <td style="text-align: right; font-weight: 600; color: #111827; padding: 6px 0;">
-              ${order.pricing.shipping === 0 ? '<span style="color: #059669; font-weight: 700;">FREE (Orders $200+)</span>' : `$${order.pricing.shipping.toFixed(2)}`}
+              ${order.pricing.shipping === 0 ? '<span style="color: #059669; font-weight: 700;">FREE ($200+ Standard Waiver)</span>' : `$${order.pricing.shipping.toFixed(2)}`}
             </td>
           </tr>
           <tr>
@@ -368,7 +368,7 @@ function generateAdminEmailHtml(order: OrderDetails, storeName: string): string 
           </tr>
           <tr>
             <td style="padding: 4px 0;">Shipping (${order.shippingMethod.name}):</td>
-            <td style="text-align: right; color: #ffffff; font-weight: 600;">$${order.pricing.shipping.toFixed(2)}</td>
+            <td style="text-align: right; color: #ffffff; font-weight: 600;">${order.pricing.shipping === 0 ? '<span style="color: #34d399; font-weight: 700;">$0.00 (FREE $200+ Standard Waiver)</span>' : `$${order.pricing.shipping.toFixed(2)}`}</td>
           </tr>
           <tr>
             <td style="padding: 4px 0;">Taxes (8%):</td>

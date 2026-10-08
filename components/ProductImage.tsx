@@ -43,13 +43,24 @@ export default function ProductImage({
   };
 
   const initialSrc = src && !src.includes('picsum.photos') ? src : getFallbackSrc();
+  
+  // Track previous src to reset error when src prop changes (React recommended pattern)
+  const [prevSrc, setPrevSrc] = useState(src);
   const [errorSrc, setErrorSrc] = useState<string | null>(null);
-  const theme = getFlavorTheme(flavor, category);
 
+  if (prevSrc !== src) {
+    setPrevSrc(src);
+    setErrorSrc(null);
+  }
+
+  const theme = getFlavorTheme(flavor, category);
   const currentSrc = errorSrc || initialSrc;
 
   const handleError = () => {
-    setErrorSrc(getFallbackSrc());
+    const fallback = getFallbackSrc();
+    if (currentSrc !== fallback) {
+      setErrorSrc(fallback);
+    }
   };
 
   return (
@@ -57,7 +68,7 @@ export default function ProductImage({
       {/* Dynamic Flavor Aura Glow */}
       {showAura && (
         <div
-          className="absolute inset-0 pointer-events-none opacity-40 blur-2xl transition-all duration-700 -z-0"
+          className="absolute inset-0 pointer-events-none opacity-40 blur-2xl transition-all duration-700 z-0"
           style={{
             background: `radial-gradient(circle, ${theme.glowColor} 0%, rgba(0,0,0,0) 70%)`,
           }}
@@ -72,18 +83,18 @@ export default function ProductImage({
           priority={priority}
           sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
           onError={handleError}
-          className={`object-contain transition-transform duration-500 relative z-10 ${className}`}
+          className={`object-contain transition-transform duration-500 z-10 ${className}`}
           referrerPolicy="no-referrer"
         />
       ) : (
         <Image
           src={currentSrc}
           alt={alt}
-          width={width || 300}
-          height={height || 300}
+          width={width || 400}
+          height={height || 400}
           priority={priority}
           onError={handleError}
-          className={`w-full h-full max-w-full max-h-full object-contain transition-transform duration-500 relative z-10 ${className}`}
+          className={`w-auto h-auto max-w-full max-h-full object-contain transition-transform duration-500 z-10 ${className}`}
           referrerPolicy="no-referrer"
         />
       )}
