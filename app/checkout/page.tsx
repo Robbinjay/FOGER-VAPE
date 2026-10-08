@@ -71,7 +71,7 @@ const SHIPPING_TIERS: ShippingOption[] = [
 ];
 
 export default function CheckoutPage() {
-  const { items, cartTotal, clearCart } = useCart();
+  const { items, cartTotal, clearCart, isLoaded } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -157,26 +157,21 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (selectedPayment === 'CHIME' && !chimeHandle.trim()) {
-      setErrorMessage('Please enter your Chime username ($ChimeSign) or phone number so we can verify your transfer.');
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
-      let paymentLabel = 'Apple Pay';
-      let paymentRef = 'Device Biometric Token (Simulated)';
-      let paymentDetails = 'Authorized via Apple Pay Express Checkout';
+      let paymentLabel = 'Apple Pay (Manual)';
+      let paymentRef = 'Manual Payment - Email Instructions Pending';
+      let paymentDetails = 'Place order, an email will be sent with payment instructions to complete payment for order.';
 
       if (selectedPayment === 'CRYPTO') {
-        paymentLabel = `Crypto (${cryptoCoin})`;
-        paymentRef = cryptoTxHash.trim() || 'Awaiting On-Chain Confirmation';
-        paymentDetails = `Sent to ${cryptoCoin} Address: ${cryptoWallets[cryptoCoin]}`;
+        paymentLabel = `Crypto (${cryptoCoin}) (Manual)`;
+        paymentRef = cryptoTxHash.trim() || `Manual ${cryptoCoin} Transfer`;
+        paymentDetails = 'Place order, an email will be sent with payment instructions to complete payment for order.';
       } else if (selectedPayment === 'CHIME') {
-        paymentLabel = 'Chime Mobile Transfer';
-        paymentRef = chimeHandle.trim();
-        paymentDetails = 'Sent to Store Chime Tag: @FogerVapes-Orders';
+        paymentLabel = 'Chime (Manual)';
+        paymentRef = chimeHandle.trim() || 'Manual Chime Transfer';
+        paymentDetails = 'Place order, an email will be sent with payment instructions to complete payment for order.';
       }
 
       const payload = {
@@ -288,26 +283,26 @@ export default function CheckoutPage() {
                     <h3 className="text-base font-black uppercase text-white tracking-wide">
                       Zoho Mail Notifications Dispatched
                     </h3>
-                    <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-500/40 px-2.5 py-1 rounded-full flex items-center gap-1">
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-yellow-400 text-black px-2.5 py-1 rounded-full font-mono flex items-center gap-1">
                       <Check className="w-3 h-3" />
-                      Zoho SMTP Active
+                      Payment Email Sent
                     </span>
                   </div>
-                  <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-3">
-                    Order notifications for this purchase are sent strictly via <strong>Zoho Mail</strong>:
+                  <p className="text-xs sm:text-sm text-yellow-400 font-bold leading-relaxed mb-3">
+                    Place order, an email will be sent with payment instructions to complete payment for order.
                   </p>
                   
                   <div className="space-y-2 text-xs">
                     <div className="flex items-center gap-2 text-gray-200 bg-black/60 p-2.5 rounded-lg border border-zinc-800">
                       <Send className="w-4 h-4 text-yellow-400 shrink-0" />
                       <span>
-                        <strong>Client Email:</strong> Full itemized receipt sent to <span className="text-yellow-400 font-bold">{completedOrder.email}</span>.
+                        <strong>Client Payment Instructions:</strong> We sent the itemized order summary and payment instructions to <span className="text-yellow-400 font-bold">{completedOrder.email}</span>. Please complete your payment using the instructions in the email.
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-gray-200 bg-black/60 p-2.5 rounded-lg border border-zinc-800">
                       <Send className="w-4 h-4 text-cyan-400 shrink-0" />
                       <span>
-                        <strong>Admin Notification:</strong> Store inventory & fulfillment alert sent to store administration via Zoho Mail.
+                        <strong>Admin Notification:</strong> Store administration notified of new pending order #{completedOrder.orderNumber} via Zoho Mail.
                       </span>
                     </div>
                   </div>
@@ -353,6 +348,16 @@ export default function CheckoutPage() {
             </div>
           </div>
         </div>
+      </div>
+    );
+  }
+
+  // LOADING STATE (Ensures 100% hydration consistency between SSR and Client)
+  if (!isLoaded) {
+    return (
+      <div className="min-h-[75vh] flex flex-col items-center justify-center p-4 bg-black text-white">
+        <div className="w-12 h-12 border-3 border-yellow-400 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-xs font-black uppercase tracking-widest text-gray-400">Loading Order...</p>
       </div>
     );
   }
@@ -710,18 +715,31 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* 3. Payment Method: APPLE PAY, CRYPTO, CHIME */}
+              {/* 3. Payment Method: APPLE PAY, CRYPTO, CHIME (Manual Payments) */}
               <div className="bg-zinc-950 p-6 sm:p-8 rounded-3xl border border-zinc-800 shadow-xl">
-                <div className="flex items-center justify-between mb-6 pb-4 border-b border-zinc-900">
+                <div className="flex items-center justify-between mb-4 pb-4 border-b border-zinc-900">
                   <div className="flex items-center gap-2.5">
                     <ShieldCheck className="w-5 h-5 text-yellow-400" />
                     <h2 className="text-lg sm:text-xl font-black uppercase tracking-tight text-white">
-                      3. Select Payment Method
+                      3. Select Payment Option
                     </h2>
                   </div>
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                    Instant & Secure
+                  <span className="text-[11px] font-black text-yellow-400 uppercase tracking-wider bg-yellow-400/10 px-3 py-1 rounded-full border border-yellow-400/20">
+                    Manual Payment
                   </span>
+                </div>
+
+                {/* Prominent Payment Description Banner */}
+                <div className="bg-yellow-400/10 border border-yellow-400/30 rounded-2xl p-4 mb-6 flex items-start gap-3">
+                  <Mail className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-[11px] font-black uppercase text-yellow-400 tracking-wider">
+                      Payment Instructions
+                    </div>
+                    <p className="text-sm font-bold text-white mt-0.5 leading-snug">
+                      Place order, an email will be sent with payment instructions to complete payment for order.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Payment Option Selector Tabs */}
@@ -738,6 +756,7 @@ export default function CheckoutPage() {
                   >
                     <Smartphone className="w-5 h-5" />
                     <span>Apple Pay</span>
+                    <span className="text-[9px] opacity-75 font-semibold">Manual</span>
                   </button>
 
                   {/* CRYPTO */}
@@ -752,6 +771,7 @@ export default function CheckoutPage() {
                   >
                     <Coins className="w-5 h-5" />
                     <span>Crypto</span>
+                    <span className="text-[9px] opacity-75 font-semibold">Manual</span>
                   </button>
 
                   {/* CHIME */}
@@ -766,10 +786,11 @@ export default function CheckoutPage() {
                   >
                     <Zap className="w-5 h-5" />
                     <span>Chime</span>
+                    <span className="text-[9px] opacity-75 font-semibold">Manual</span>
                   </button>
                 </div>
 
-                {/* PAYMENT METHOD DETAILS */}
+                {/* MANUAL PAYMENT METHOD DETAILS */}
 
                 {/* APPLE PAY PANEL */}
                 {selectedPayment === 'APPLE_PAY' && (
@@ -777,36 +798,55 @@ export default function CheckoutPage() {
                     <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
                       <div className="flex items-center gap-2">
                         <Smartphone className="w-5 h-5 text-white" />
-                        <span className="font-extrabold text-sm uppercase text-white">Apple Pay One-Touch Checkout</span>
+                        <span className="font-extrabold text-sm uppercase text-white">Apple Pay (Manual Payment)</span>
                       </div>
-                      <span className="text-[10px] bg-white text-black font-black px-2 py-0.5 rounded-full uppercase">
-                        Instant Authorization
+                      <span className="text-[10px] bg-white/20 text-white font-black px-2.5 py-0.5 rounded-full uppercase border border-white/30">
+                        Manual Processing
                       </span>
                     </div>
 
-                    <p className="text-xs text-gray-300 leading-relaxed">
-                      Click the Apple Pay checkout button below. On Apple devices (iPhone, iPad, Mac), you can authorize seamlessly with Face ID, Touch ID, or your device passcode.
-                    </p>
+                    <div className="bg-black/80 p-4 rounded-xl border border-zinc-800">
+                      <p className="text-xs sm:text-sm font-bold text-yellow-400 leading-relaxed">
+                        Place order, an email will be sent with payment instructions to complete payment for order.
+                      </p>
+                      <p className="text-xs text-gray-300 mt-2 leading-relaxed">
+                        After Placing your order, we will send an email with our Apple Pay recipient contact details and your unique Order Reference. You will send payment manually from your Apple device.
+                      </p>
+                    </div>
 
-                    <div className="p-4 bg-black rounded-xl border border-zinc-800 text-center">
-                      <div className="text-xs text-gray-400 mb-2">Simulated Order Charge Amount</div>
-                      <div className="text-2xl font-black text-white">${total.toFixed(2)} USD</div>
+                    <div className="p-4 bg-black rounded-xl border border-zinc-800 flex items-center justify-between">
+                      <div className="text-xs text-gray-400">Total Order Amount to Pay:</div>
+                      <div className="text-xl font-black text-white">${total.toFixed(2)} USD</div>
                     </div>
                   </div>
                 )}
 
                 {/* CRYPTO PANEL */}
                 {selectedPayment === 'CRYPTO' && (
-                  <div className="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 space-y-5">
+                  <div className="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 space-y-4">
                     <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
-                      <span className="font-extrabold text-sm uppercase text-yellow-400">Pay with Cryptocurrency</span>
-                      <span className="text-[10px] text-gray-400 uppercase font-bold">Zero Processing Fees</span>
+                      <div className="flex items-center gap-2">
+                        <Coins className="w-5 h-5 text-yellow-400" />
+                        <span className="font-extrabold text-sm uppercase text-yellow-400">Crypto (Manual Payment)</span>
+                      </div>
+                      <span className="text-[10px] bg-yellow-400/20 text-yellow-400 font-black px-2.5 py-0.5 rounded-full uppercase border border-yellow-400/30">
+                        Manual Processing
+                      </span>
                     </div>
 
-                    {/* Coin Selector */}
+                    <div className="bg-black/80 p-4 rounded-xl border border-zinc-800">
+                      <p className="text-xs sm:text-sm font-bold text-yellow-400 leading-relaxed">
+                        Place order, an email will be sent with payment instructions to complete payment for order.
+                      </p>
+                      <p className="text-xs text-gray-300 mt-2 leading-relaxed">
+                        After Placing your order, we will send an email with our Crypto recipient contact details and your unique Order Reference. You will send payment manually from your crypto wallet.
+                      </p>
+                    </div>
+
+                    {/* Preferred Coin Selector */}
                     <div>
                       <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                        Choose Currency:
+                        Preferred Cryptocurrency:
                       </label>
                       <div className="grid grid-cols-3 gap-2">
                         {(['USDT', 'BTC', 'ETH'] as const).map((coin) => (
@@ -826,38 +866,9 @@ export default function CheckoutPage() {
                       </div>
                     </div>
 
-                    {/* Wallet Box */}
-                    <div className="bg-black p-4 rounded-xl border border-zinc-800">
-                      <div className="text-[11px] font-bold text-gray-400 uppercase mb-1">
-                        Send Exactly ${total.toFixed(2)} worth of {cryptoCoin} to:
-                      </div>
-                      <div className="flex items-center justify-between gap-2 bg-zinc-900 p-3 rounded-lg border border-zinc-800 mt-2">
-                        <code className="text-xs text-yellow-400 font-mono break-all">
-                          {cryptoWallets[cryptoCoin]}
-                        </code>
-                        <button
-                          type="button"
-                          onClick={() => handleCopyWallet(cryptoWallets[cryptoCoin])}
-                          className="shrink-0 p-2 bg-zinc-800 hover:bg-yellow-400 hover:text-black rounded-lg text-white transition-colors"
-                          title="Copy Wallet Address"
-                        >
-                          {copiedAddress ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                        </button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="cryptoTx" className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                        Transaction Hash / Sender Wallet (Optional for fast verification):
-                      </label>
-                      <input
-                        type="text"
-                        id="cryptoTx"
-                        value={cryptoTxHash}
-                        onChange={(e) => setCryptoTxHash(e.target.value)}
-                        placeholder="e.g. 0x8a91b... or your sending wallet address"
-                        className="w-full px-4 py-2.5 rounded-xl bg-black border border-zinc-800 text-white text-xs outline-none focus:border-yellow-400 font-mono"
-                      />
+                    <div className="p-4 bg-black rounded-xl border border-zinc-800 flex items-center justify-between">
+                      <div className="text-xs text-gray-400">Total Order Amount to Pay:</div>
+                      <div className="text-xl font-black text-yellow-400">${total.toFixed(2)} USD</div>
                     </div>
                   </div>
                 )}
@@ -868,88 +879,74 @@ export default function CheckoutPage() {
                     <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
                       <div className="flex items-center gap-2">
                         <Zap className="w-5 h-5 text-emerald-400" />
-                        <span className="font-extrabold text-sm uppercase text-white">Chime Mobile Transfer</span>
+                        <span className="font-extrabold text-sm uppercase text-white">Chime (Manual Payment)</span>
                       </div>
-                      <span className="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full uppercase font-black">
-                        Instant Member-to-Member
+                      <span className="text-[10px] bg-emerald-500/20 text-emerald-400 font-black px-2.5 py-0.5 rounded-full uppercase border border-emerald-500/30">
+                        Manual Processing
                       </span>
                     </div>
 
-                    <div className="bg-black p-4 rounded-xl border border-zinc-800 space-y-2">
-                      <div className="text-xs text-gray-400">Send Payment of <strong>${total.toFixed(2)} USD</strong> to our Chime Handle:</div>
-                      <div className="flex items-center justify-between bg-zinc-900 p-3 rounded-lg border border-zinc-800">
-                        <span className="text-base font-black text-emerald-400 font-mono">
-                          $FogerVapes-Distribution
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleCopyWallet('$FogerVapes-Distribution')}
-                          className="p-1.5 bg-zinc-800 hover:bg-emerald-400 hover:text-black rounded-md text-white transition-colors"
-                        >
-                          {copiedAddress ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                        </button>
-                      </div>
+                    <div className="bg-black/80 p-4 rounded-xl border border-zinc-800">
+                      <p className="text-xs sm:text-sm font-bold text-yellow-400 leading-relaxed">
+                        Place order, an email will be sent with payment instructions to complete payment for order.
+                      </p>
+                      <p className="text-xs text-gray-300 mt-2 leading-relaxed">
+                        After Placing your order, we will send an email with our Chime recipient contact details and your unique Order Reference. You will send payment manually from your Chime app.
+                      </p>
                     </div>
 
                     <div>
                       <label htmlFor="chimeHandle" className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
-                        Your Chime Sign ($tag) or Phone Number <span className="text-yellow-400">*</span>
+                        Your Chime Sign ($tag) or Phone (Optional reference)
                       </label>
                       <input
                         type="text"
                         id="chimeHandle"
                         value={chimeHandle}
                         onChange={(e) => setChimeHandle(e.target.value)}
-                        placeholder="e.g. $JohnDoe or (555) 123-4567"
+                        placeholder="e.g. $YourName or (555) 123-4567"
                         className="w-full px-4 py-3 rounded-xl bg-black border border-zinc-800 text-white text-sm outline-none focus:border-emerald-400"
-                        required={selectedPayment === 'CHIME'}
                       />
-                      <p className="text-[11px] text-gray-400 mt-1">
-                        We use your Chime sign to match your transfer instantly before dispatch.
-                      </p>
+                    </div>
+
+                    <div className="p-4 bg-black rounded-xl border border-zinc-800 flex items-center justify-between">
+                      <div className="text-xs text-gray-400">Total Order Amount to Pay:</div>
+                      <div className="text-xl font-black text-emerald-400">${total.toFixed(2)} USD</div>
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Submit Button */}
-              <button 
-                type="submit" 
-                disabled={isSubmitting || !isMinimumMet}
-                className={`w-full py-5 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest transition-all shadow-[0_0_30px_rgba(250,204,21,0.2)] flex items-center justify-center gap-2 cursor-pointer ${
-                  !isMinimumMet
-                    ? 'bg-zinc-800 text-gray-500 cursor-not-allowed shadow-none'
-                    : selectedPayment === 'APPLE_PAY'
-                    ? 'bg-white text-black hover:bg-gray-100'
-                    : selectedPayment === 'CHIME'
-                    ? 'bg-emerald-400 text-black hover:bg-emerald-300'
-                    : 'bg-yellow-400 text-black hover:bg-yellow-300'
-                }`}
-              >
-                {isSubmitting ? (
-                  <div className="w-6 h-6 border-3 border-black border-t-transparent rounded-full animate-spin" />
-                ) : !isMinimumMet ? (
-                  <span>Minimum $100.00 Required to Order</span>
-                ) : selectedPayment === 'APPLE_PAY' ? (
-                  <>
-                    <span>Pay with Apple Pay • ${total.toFixed(2)} USD</span>
-                    <Smartphone className="w-5 h-5" />
-                  </>
-                ) : selectedPayment === 'CHIME' ? (
-                  <>
-                    <span>Confirm Chime Order • ${total.toFixed(2)} USD</span>
-                    <Zap className="w-5 h-5" />
-                  </>
-                ) : (
-                  <>
-                    <span>Submit Crypto Order • ${total.toFixed(2)} USD</span>
-                    <Coins className="w-5 h-5" />
-                  </>
-                )}
-              </button>
+              <div className="space-y-3">
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting || !isMinimumMet}
+                  className={`w-full py-5 rounded-2xl font-black text-base sm:text-lg uppercase tracking-wider transition-all shadow-[0_0_30px_rgba(250,204,21,0.2)] flex items-center justify-center gap-3 cursor-pointer ${
+                    !isMinimumMet
+                      ? 'bg-zinc-800 text-gray-500 cursor-not-allowed shadow-none'
+                      : 'bg-yellow-400 text-black hover:bg-yellow-300'
+                  }`}
+                >
+                  {isSubmitting ? (
+                    <div className="w-6 h-6 border-3 border-black border-t-transparent rounded-full animate-spin" />
+                  ) : !isMinimumMet ? (
+                    <span>Minimum $100.00 Required to Order</span>
+                  ) : (
+                    <>
+                      <span>Place Order • ${total.toFixed(2)} USD</span>
+                      <ArrowRight className="w-5 h-5" />
+                    </>
+                  )}
+                </button>
 
-              <div className="text-center text-xs text-gray-500">
-                🔒 All orders protected by 256-bit SSL encryption. Zoho Mail order receipt sent immediately upon placement.
+                <p className="text-center text-xs font-bold text-yellow-400/90 leading-relaxed px-2">
+                  Place order, an email will be sent with payment instructions to complete payment for order.
+                </p>
+
+                <div className="text-center text-xs text-gray-500 pt-1">
+                  🔒 All orders protected by 256-bit SSL encryption. Zoho Mail order receipt sent immediately upon placement.
+                </div>
               </div>
             </form>
           </div>

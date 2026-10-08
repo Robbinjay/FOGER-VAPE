@@ -7,9 +7,14 @@ import { Footer } from '@/components/Footer';
 import { CartDrawer } from '@/components/CartDrawer';
 import JsonLd from '@/components/JsonLd';
 
+import { getSiteUrl, siteConfig } from '@/lib/site-config';
+
 const inter = Inter({ subsets: ['latin'] });
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'Foger Vape Distributor | Authentic Bit 35K & Switch Pro',
     template: '%s | Foger Vape Distributor'
@@ -24,11 +29,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://foger-vapes.store',
-    siteName: 'Foger Vapes Distributor',
+    url: siteUrl,
+    siteName: 'Foger Vapes Distributor (foger-vapes.store)',
     title: 'Foger Vapes Distributor | Authentic Bit 35K & Switch Pro',
     description: 'Authorized distributor of authentic Foger Vape products. 100% genuine guaranteed.',
     images: [

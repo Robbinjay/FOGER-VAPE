@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { getSiteUrl, DEFAULT_SITE_URL, PAYMENTS_EMAIL } from './site-config';
 
 export interface OrderItem {
   id: string;
@@ -67,12 +68,26 @@ export interface EmailDispatchResult {
  * Host: smtppro.zoho.com (for Zoho Workplace/organization domains) or smtp.zoho.com (personal)
  * Port: 465 (SSL) or 587 (TLS)
  */
-function getZohoTransporter() {
-  const user = process.env.ZOHO_MAIL_USER;
-  const pass = process.env.ZOHO_MAIL_PASSWORD;
-  const host = process.env.ZOHO_MAIL_HOST || 'smtppro.zoho.com';
-  const port = parseInt(process.env.ZOHO_MAIL_PORT || '465', 10);
+function getZohoConfig() {
+  let user = (process.env.ZOHO_MAIL_USER || '').trim();
+  if (user.toLowerCase().includes('foger-vapes.org')) {
+    user = user.replace(/foger-vapes\.org/gi, 'foger-vapes.store');
+  }
+  const pass = (process.env.ZOHO_MAIL_PASSWORD || '').trim();
+  let adminEmail = (process.env.ZOHO_ADMIN_EMAIL || user || '').trim();
+  if (adminEmail.toLowerCase().includes('foger-vapes.org')) {
+    adminEmail = adminEmail.replace(/foger-vapes\.org/gi, 'foger-vapes.store');
+  }
+  const host = (process.env.ZOHO_MAIL_HOST || 'smtp.zoho.com').trim();
+  const port = parseInt((process.env.ZOHO_MAIL_PORT || '587').trim(), 10);
   const secure = port === 465;
+  const fromName = (process.env.ZOHO_MAIL_FROM_NAME || 'Foger Vapes Store').trim();
+
+  return { user, pass, adminEmail, host, port, secure, fromName };
+}
+
+function getZohoTransporter() {
+  const { user, pass, host, port, secure } = getZohoConfig();
 
   if (!user || !pass) {
     return null;
@@ -86,8 +101,12 @@ function getZohoTransporter() {
       user,
       pass,
     },
+    requireTLS: !secure,
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000,
     tls: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: false,
     },
   });
 }
@@ -160,11 +179,44 @@ function generateClientEmailHtml(order: OrderDetails, storeName: string): string
           </tr>
           <tr>
             <td style="color: #6b7280; padding: 4px 0;">Payment Option:</td>
-            <td style="text-align: right; font-weight: 700; color: #059669; padding: 4px 0;">
-              ${order.paymentMethod.label} ${order.paymentMethod.reference ? `(${order.paymentMethod.reference})` : ''}
+            <td style="text-align: right; font-weight: 700; color: #b45309; padding: 4px 0;">
+              ${order.paymentMethod.label} (Manual)
             </td>
           </tr>
         </table>
+      </div>
+
+      <!-- Payment Instructions to Complete Payment -->
+      <div style="background-color: #fffbeb; border: 2px solid #facc15; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+        <h3 style="margin: 0 0 8px 0; color: #92400e; font-size: 16px; font-weight: 800; text-transform: uppercase;">
+          Payment Instructions to Complete Payment for Order
+        </h3>
+        <p style="margin: 0 0 14px 0; font-size: 13px; color: #78350f; line-height: 1.5; font-weight: 600;">
+          Place order, an email will be sent with payment instructions to complete payment for order. Please follow the instructions below to complete payment of <strong>$${order.pricing.total.toFixed(2)} USD</strong>:
+        </p>
+        
+        <div style="background-color: #ffffff; border: 1px solid #fde047; border-radius: 10px; padding: 16px; font-size: 13px; color: #1f2937; line-height: 1.6;">
+          ${order.paymentMethod.type === 'APPLE_PAY' ? `
+            <strong style="color: #000000; font-size: 14px;">Apple Pay Manual Payment Details:</strong><br/>
+            1. Open <strong>Apple Wallet</strong>, <strong>Apple Cash</strong>, or Messages on your Apple device.<br/>
+            2. Send payment of <strong>$${order.pricing.total.toFixed(2)} USD</strong> to: <code style="background-color: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-weight: 700; color: #111827;">${PAYMENTS_EMAIL}</code><br/>
+            3. Include your Order Number <strong style="color: #d97706;">#${order.orderNumber}</strong> in the memo or message.<br/>
+            4. Once payment is sent, our team will verify and dispatch your order.
+          ` : order.paymentMethod.type === 'CHIME' ? `
+            <strong style="color: #047857; font-size: 14px;">Chime Mobile Transfer Details:</strong><br/>
+            1. Open your <strong>Chime app</strong> and navigate to <strong>Pay Anyone</strong>.<br/>
+            2. Send <strong>$${order.pricing.total.toFixed(2)} USD</strong> to our official Chime sign: <code style="background-color: #ecfdf5; padding: 2px 6px; border-radius: 4px; font-weight: 800; color: #047857;">$FogerVapes-Distribution</code><br/>
+            3. In the transfer memo, enter your Order Number: <strong style="color: #d97706;">#${order.orderNumber}</strong>.<br/>
+            4. Your order will be immediately queued for packaging upon transfer receipt.
+          ` : `
+            <strong style="color: #d97706; font-size: 14px;">Cryptocurrency Payment Details:</strong><br/>
+            Send <strong>$${order.pricing.total.toFixed(2)} USD</strong> worth of crypto to our verified wallet:<br/>
+            • <strong>USDT (TRC-20):</strong> <code style="background-color: #f3f4f6; font-size: 12px; padding: 2px 6px; border-radius: 4px; font-family: monospace;">TKhFogerVapesOfficialTRC20Network9381k72P</code><br/>
+            • <strong>Bitcoin (BTC):</strong> <code style="background-color: #f3f4f6; font-size: 12px; padding: 2px 6px; border-radius: 4px; font-family: monospace;">bc1qfoger98x27vape834k9811authentickit729</code><br/>
+            • <strong>Ethereum (ETH):</strong> <code style="background-color: #f3f4f6; font-size: 12px; padding: 2px 6px; border-radius: 4px; font-family: monospace;">0x71F09E839Da5F84b39FogerVapesDistributor01</code><br/>
+            Please email or reply with your tx hash and Order <strong style="color: #d97706;">#${order.orderNumber}</strong>.
+          `}
+        </div>
       </div>
 
       <!-- Items Table -->
@@ -231,13 +283,13 @@ function generateClientEmailHtml(order: OrderDetails, storeName: string): string
       <!-- Support Footer -->
       <p style="color: #6b7280; font-size: 13px; text-align: center; margin: 0;">
         Need assistance with your order? Reply directly to this email or reach us through our 
-        <a href="https://foger-vapes.store/contact" style="color: #d97706; text-decoration: none; font-weight: 600;">Contact Support Page</a>.
+        <a href="${getSiteUrl()}/contact" style="color: #d97706; text-decoration: none; font-weight: 600;">Contact Support Page</a>.
       </p>
     </div>
 
     <!-- Footer -->
     <div style="background-color: #111827; padding: 20px 24px; text-align: center; color: #9ca3af; font-size: 11px;">
-      <p style="margin: 0 0 4px 0;">&copy; ${new Date().getFullYear()} ${storeName}. Authorized Foger Vape Distributor & Reseller.</p>
+      <p style="margin: 0 0 4px 0;">&copy; ${new Date().getFullYear()} ${storeName}. Authorized Foger Vape Distributor (foger-vapes.store).</p>
       <p style="margin: 0;">Sent via Zoho Mail to ${order.customer.email}</p>
     </div>
   </div>
@@ -333,13 +385,18 @@ function generateAdminEmailHtml(order: OrderDetails, storeName: string): string 
       <!-- Payment Method Block -->
       <div style="background-color: #111827; padding: 16px; border-radius: 12px; border: 1px solid #374151; margin-bottom: 24px;">
         <div style="color: #9ca3af; font-size: 11px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 6px;">
-          Payment Method Details
+          Payment Method Details (Manual)
         </div>
         <div style="font-size: 14px; font-weight: 700; color: #ffffff;">
           ${order.paymentMethod.label}
         </div>
-        ${order.paymentMethod.reference ? `<div style="font-size: 13px; color: #facc15; margin-top: 4px; font-family: monospace;">Ref/Account: ${order.paymentMethod.reference}</div>` : ''}
-        ${order.paymentMethod.details ? `<div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">${order.paymentMethod.details}</div>` : ''}
+        <div style="font-size: 12px; color: #facc15; margin-top: 4px; font-weight: 700;">
+          Status: Manual Payment Pending — Instructions sent to customer
+        </div>
+        <div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">
+          Customer Notice: Place order, an email will be sent with payment instructions to complete payment for order.
+        </div>
+        ${order.paymentMethod.reference ? `<div style="font-size: 13px; color: #93c5fd; margin-top: 4px; font-family: monospace;">Customer Ref: ${order.paymentMethod.reference}</div>` : ''}
       </div>
 
       <!-- Order Items Table -->
@@ -408,10 +465,7 @@ function generateAdminEmailHtml(order: OrderDetails, storeName: string): string 
 export async function sendZohoOrderNotifications(
   order: OrderDetails
 ): Promise<EmailDispatchResult> {
-  const user = process.env.ZOHO_MAIL_USER;
-  const pass = process.env.ZOHO_MAIL_PASSWORD;
-  const adminEmail = process.env.ZOHO_ADMIN_EMAIL || user;
-  const fromName = process.env.ZOHO_MAIL_FROM_NAME || 'Foger Vapes Store';
+  const { user, pass, adminEmail, fromName } = getZohoConfig();
 
   // If Zoho Mail credentials are not set in environment secrets, return simulation info
   if (!user || !pass) {
@@ -449,7 +503,11 @@ export async function sendZohoOrderNotifications(
   try {
     const clientMailOptions = {
       from: fromHeader,
-      to: order.customer.email,
+      envelope: {
+        from: user,
+        to: [order.customer.email.trim()],
+      },
+      to: order.customer.email.trim(),
       replyTo: user,
       subject: `Order Confirmation #${order.orderNumber} - Foger Vapes`,
       html: generateClientEmailHtml(order, fromName),
@@ -470,8 +528,12 @@ export async function sendZohoOrderNotifications(
       const isUrgent = order.shippingMethod.id === 'same-day';
       const adminMailOptions = {
         from: fromHeader,
+        envelope: {
+          from: user,
+          to: [adminEmail],
+        },
         to: adminEmail,
-        replyTo: order.customer.email,
+        replyTo: order.customer.email.trim(),
         subject: `${isUrgent ? '🚨 [SAME DAY SHIPPING] ' : '⚡ [NEW ORDER] '}#${order.orderNumber} ($${order.pricing.total.toFixed(2)}) - ${order.customer.firstName} ${order.customer.lastName} (${order.paymentMethod.label})`,
         html: generateAdminEmailHtml(order, fromName),
         text: `New order received #${order.orderNumber} for $${order.pricing.total.toFixed(2)} from ${order.customer.firstName} ${order.customer.lastName} (${order.customer.email}). Shipping: ${order.shippingMethod.name}. Payment: ${order.paymentMethod.label}. Phone: ${order.customer.phone}.`,
@@ -490,6 +552,11 @@ export async function sendZohoOrderNotifications(
 
   const overallSuccess = clientSent || adminSent;
 
+  let diagnosticHint = '';
+  if (lastError && (lastError.includes('553') || lastError.includes('Relaying disallowed') || lastError.includes('Invalid Domain'))) {
+    diagnosticHint = ' (Zoho 553 Relaying disallowed: verify in Zoho Mail Admin Console > Domains that your domain (foger-vapes.store) is verified with active MX/SPF/DKIM records, and that ZOHO_MAIL_USER matches the active Zoho mailbox or verified Send Mail As address)';
+  }
+
   return {
     success: overallSuccess,
     clientSent,
@@ -497,7 +564,7 @@ export async function sendZohoOrderNotifications(
     mode: 'live',
     message: overallSuccess
       ? 'Order notifications successfully dispatched via Zoho Mail to client and admin.'
-      : 'Failed to send notifications through Zoho Mail.',
-    error: lastError || undefined,
+      : `Failed to send notifications through Zoho Mail: ${lastError}${diagnosticHint}`,
+    error: lastError ? `${lastError}${diagnosticHint}` : undefined,
   };
 }

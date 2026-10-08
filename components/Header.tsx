@@ -23,7 +23,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export function Header() {
-  const { cartCount, setIsCartOpen } = useCart();
+  const { cartCount, setIsCartOpen, isLoaded } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAccessoriesDropdownOpen, setIsAccessoriesDropdownOpen] = useState(false);
   const [isMobileAccessoriesExpanded, setIsMobileAccessoriesExpanded] = useState(true);
@@ -101,7 +101,7 @@ export function Header() {
             >
               <ShoppingBag className="w-4 h-4" />
               <span>CART</span>
-              {cartCount > 0 && (
+              {isLoaded && cartCount > 0 && (
                 <span className="ml-1 flex items-center justify-center w-5 h-5 text-xs font-black text-black bg-[#facc15] rounded-full animate-bounce">
                   {cartCount}
                 </span>

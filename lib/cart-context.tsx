@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useSyncExternalStore, useCallback } from 'react';
 import { Product } from './data';
 
 export interface CartItem extends Product {
@@ -17,71 +17,135 @@ interface CartContextType {
   cartCount: number;
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
+  isLoaded: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('foger-cart');
-        if (saved) return JSON.parse(saved);
-      } catch (e) {
-        console.error('Failed to load initial cart', e);
-      }
+// Listeners for external store updates (supporting multi-tab and local syncing)
+const listeners = new Set<() => void>();
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  const handleStorage = (e: StorageEvent) => {
+    if (e.key === 'foger-cart') {
+      callback();
     }
-    return [];
-  });
+  };
+  if (typeof window !== 'undefined') {
+    window.addEventListener('storage', handleStorage);
+  }
+  return () => {
+    listeners.delete(callback);
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('storage', handleStorage);
+    }
+  };
+}
 
+function notify() {
+  listeners.forEach((listener) => listener());
+}
+
+let cachedCartString: string | null = null;
+let cachedCartItems: CartItem[] = [];
+const SERVER_CART_SNAPSHOT: CartItem[] = [];
+
+function getClientSnapshot(): CartItem[] {
+  if (typeof window === 'undefined') return SERVER_CART_SNAPSHOT;
+  try {
+    const raw = localStorage.getItem('foger-cart') || '[]';
+    if (raw !== cachedCartString) {
+      cachedCartString = raw;
+      const parsed = JSON.parse(raw);
+      cachedCartItems = Array.isArray(parsed) ? parsed : [];
+    }
+    return cachedCartItems;
+  } catch (e) {
+    console.error('Failed to parse cart snapshot', e);
+    return [];
+  }
+}
+
+function getServerSnapshot(): CartItem[] {
+  return SERVER_CART_SNAPSHOT;
+}
+
+function saveCartToStorage(items: CartItem[]) {
+  try {
+    const raw = JSON.stringify(items);
+    cachedCartString = raw;
+    cachedCartItems = items;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('foger-cart', raw);
+    }
+  } catch (e) {
+    console.error('Failed to save cart to localStorage', e);
+  }
+  notify();
+}
+
+const emptySubscribe = () => () => {};
+
+export function CartProvider({ children }: { children: React.ReactNode }) {
+  const items = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
+  const isLoaded = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('foger-cart', JSON.stringify(items));
-    } catch (e) {
-      console.error('Failed to save cart', e);
+  const addToCart = useCallback((product: Product, quantity: number = 1) => {
+    const currentItems = getClientSnapshot();
+    const existing = currentItems.find((item) => item.id === product.id);
+    let nextItems: CartItem[];
+    if (existing) {
+      nextItems = currentItems.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+      );
+    } else {
+      nextItems = [...currentItems, { ...product, quantity }];
     }
-  }, [items]);
-
-  const addToCart = (product: Product, quantity: number = 1) => {
-    setItems(prev => {
-      const existing = prev.find(item => item.id === product.id);
-      if (existing) {
-        return prev.map(item => 
-          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
-        );
-      }
-      return [...prev, { ...product, quantity }];
-    });
+    saveCartToStorage(nextItems);
     setIsCartOpen(true);
-  };
+  }, []);
 
-  const removeFromCart = (productId: string) => {
-    setItems(prev => prev.filter(item => item.id !== productId));
-  };
+  const removeFromCart = useCallback((productId: string) => {
+    const currentItems = getClientSnapshot();
+    const nextItems = currentItems.filter((item) => item.id !== productId);
+    saveCartToStorage(nextItems);
+  }, []);
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = useCallback((productId: string, quantity: number) => {
+    const currentItems = getClientSnapshot();
     if (quantity <= 0) {
-      removeFromCart(productId);
+      saveCartToStorage(currentItems.filter((item) => item.id !== productId));
       return;
     }
-    setItems(prev => prev.map(item => 
+    const nextItems = currentItems.map((item) =>
       item.id === productId ? { ...item, quantity } : item
-    ));
-  };
+    );
+    saveCartToStorage(nextItems);
+  }, []);
 
-  const clearCart = () => {
-    setItems([]);
-  };
+  const clearCart = useCallback(() => {
+    saveCartToStorage([]);
+  }, []);
 
   const cartTotal = items.reduce((total, item) => total + item.price * item.quantity, 0);
   const cartCount = items.reduce((count, item) => count + item.quantity, 0);
 
   return (
-    <CartContext.Provider value={{
-      items, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount, isCartOpen, setIsCartOpen
-    }}>
+    <CartContext.Provider
+      value={{
+        items,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        cartTotal,
+        cartCount,
+        isCartOpen,
+        setIsCartOpen,
+        isLoaded,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

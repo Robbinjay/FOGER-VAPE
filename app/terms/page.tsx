@@ -18,7 +18,7 @@ export default function TermsPage() {
         <div className="bg-zinc-950 p-10 rounded-3xl border border-white/10 prose prose-invert max-w-none prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-headings:text-white prose-a:text-[#facc15] hover:prose-a:text-yellow-300">
           <h2>1. Agreement to Terms</h2>
           <p>
-            By accessing or using the Foger Vapes website, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you do not have permission to access the service.
+            By accessing or using the official Foger Vapes website (<strong>foger-vapes.store</strong>), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you do not have permission to access the service.
           </p>
 
           <h2>2. Age Restriction</h2>

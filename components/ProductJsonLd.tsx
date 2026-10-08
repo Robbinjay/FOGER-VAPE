@@ -1,17 +1,20 @@
 import React from 'react';
 import { Product } from '@/lib/data';
+import { getSiteUrl } from '@/lib/site-config';
 
 interface ProductJsonLdProps {
   product: Product;
 }
 
 export default function ProductJsonLd({ product }: ProductJsonLdProps) {
+  const baseUrl = getSiteUrl();
+
   const productData = {
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": product.name,
     "image": [
-      `https://fogervapes.org${product.image}`
+      `${baseUrl}${product.image}`
     ],
     "description": product.description,
     "sku": product.id,
@@ -21,7 +24,7 @@ export default function ProductJsonLd({ product }: ProductJsonLdProps) {
     },
     "offers": {
       "@type": "Offer",
-      "url": `https://fogervapes.org/products/${product.slug}`,
+      "url": `${baseUrl}/products/${product.slug}`,
       "priceCurrency": "USD",
       "price": product.price,
       "priceValidUntil": "2027-12-31",

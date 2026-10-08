@@ -140,7 +140,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           
           {/* Product Image Stage */}
           <div className="space-y-6 lg:sticky lg:top-28">
-            <div className="relative aspect-square w-full bg-zinc-950 rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl flex items-center justify-center p-6 sm:p-10">
+            <div className="relative aspect-square w-full bg-zinc-950 rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl flex items-center justify-center p-6 sm:p-8">
+              {/* Subtle background ambient gradient */}
+              <div className="absolute inset-0 bg-radial from-zinc-900/60 to-black pointer-events-none z-0" />
+
               {/* Puff / Badge Overlay */}
               <div className="absolute top-4 left-4 z-30 flex flex-wrap items-center gap-2">
                 <span className="text-black font-black tracking-wider uppercase text-xs bg-[#facc15] px-3.5 py-1.5 rounded-full shadow-lg">
@@ -158,10 +161,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span>In Stock</span>
               </div>
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none z-20" />
               
-              <div className="relative w-full h-full flex items-center justify-center">
+              {/* Centered Product Image */}
+              <div className="relative z-10 w-full h-full flex items-center justify-center">
                 <ProductImage 
                   src={product.image} 
                   alt={product.name}
@@ -171,7 +173,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   showAura={true}
-                  className="p-4 sm:p-8"
+                  className="p-2 sm:p-4 hover:scale-105 transition-transform duration-500"
                   priority
                 />
               </div>

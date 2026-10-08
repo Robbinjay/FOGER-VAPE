@@ -1,12 +1,15 @@
 import { MetadataRoute } from 'next';
+import { getSiteUrl } from '@/lib/site-config';
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = getSiteUrl();
+
   return {
     rules: {
       userAgent: '*',
       allow: '/',
       disallow: ['/checkout', '/track-order'],
     },
-    sitemap: 'https://foger-vapes.store/sitemap.xml',
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

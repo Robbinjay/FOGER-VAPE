@@ -58,8 +58,13 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto px-4 mt-16 pt-8 border-t border-white/10 text-sm text-center text-gray-500 font-medium">
-        &copy; {new Date().getFullYear()} foger-vapes.store. All rights reserved.
+      <div className="container mx-auto px-4 mt-16 pt-8 border-t border-white/10 text-sm text-center text-gray-500 font-medium space-y-2">
+        <p>
+          &copy; {new Date().getFullYear()} <strong className="text-gray-300">foger-vapes.store</strong>. Authorized Foger Vape Distributor. All rights reserved.
+        </p>
+        <p className="text-xs text-gray-400">
+          Official Distribution Domain: <span className="text-[#facc15] font-semibold">foger-vapes.store</span>
+        </p>
       </div>
     </footer>
   );

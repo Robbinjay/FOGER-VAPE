@@ -49,7 +49,7 @@ export default function PrivacyPage() {
 
           <h2>5. Contact Us</h2>
           <p>
-            If you have any questions about this Privacy Policy, please contact us at support@fogervapes.com.
+            If you have any questions about this Privacy Policy or data handling across our official domain (<strong>foger-vapes.store</strong>), please contact our privacy compliance team at <a href="mailto:support@foger-vapes.store" className="text-[#facc15] hover:underline">support@foger-vapes.store</a>.
           </p>
         </div>
       </div>

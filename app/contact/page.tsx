@@ -14,11 +14,12 @@ export default function ContactPage() {
     "mainEntity": {
       "@type": "Organization",
       "name": "Foger Vapes Distributor",
+      "url": "https://foger-vapes.store",
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+1-800-123-4567",
         "contactType": "customer service",
-        "email": "support@fogervapes.com"
+        "email": "support@foger-vapes.store"
       }
     }
   };
@@ -78,7 +79,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-1">Email</h4>
-                  <a href="mailto:support@fogervapes.com" className="text-xl font-bold text-white hover:text-[#facc15] transition-colors">support@fogervapes.com</a>
+                  <a href="mailto:support@foger-vapes.store" className="text-xl font-bold text-white hover:text-[#facc15] transition-colors">support@foger-vapes.store</a>
                 </div>
               </div>
               <div className="flex items-start gap-4">
