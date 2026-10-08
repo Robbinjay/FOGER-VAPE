@@ -25,8 +25,8 @@ export default function ProductImage({
   flavor,
   category,
   subCategory,
-  width,
-  height,
+  width = 600,
+  height = 600,
   fill = false,
   className = '',
   priority = false,
@@ -57,7 +57,7 @@ export default function ProductImage({
   const theme = getFlavorTheme(flavor, category);
 
   return (
-    <div key={src} className="relative flex items-center justify-center overflow-hidden w-full h-full">
+    <div key={src} className="relative flex items-center justify-center overflow-hidden w-full h-full min-h-[220px]">
       {/* Dynamic Flavor Aura Glow */}
       {showAura && (
         <div
@@ -68,29 +68,17 @@ export default function ProductImage({
         />
       )}
 
-      {fill ? (
-        <Image
-          src={currentSrc}
-          alt={alt}
-          fill
-          priority={priority}
-          sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
-          onError={handleError}
-          className={`object-contain transition-transform duration-500 z-10 ${className}`}
-          referrerPolicy="no-referrer"
-        />
-      ) : (
-        <Image
-          src={currentSrc}
-          alt={alt}
-          width={width || 400}
-          height={height || 400}
-          priority={priority}
-          onError={handleError}
-          className={`w-auto h-auto max-w-full max-h-full object-contain transition-transform duration-500 z-10 ${className}`}
-          referrerPolicy="no-referrer"
-        />
-      )}
+      <Image
+        src={currentSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        priority={priority}
+        sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+        onError={handleError}
+        className={`w-full h-full object-contain transition-transform duration-500 z-10 ${className}`}
+        referrerPolicy="no-referrer"
+      />
     </div>
   );
 }
