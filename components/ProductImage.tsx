@@ -42,19 +42,10 @@ export default function ProductImage({
     return '/images/foger-bit-35k.jpg';
   };
 
-  const initialSrc = src && !src.includes('picsum.photos') ? src : getFallbackSrc();
-  
-  // Track previous src to reset error when src prop changes (React recommended pattern)
-  const [prevSrc, setPrevSrc] = useState(src);
+  const validSrc = src && !src.includes('picsum.photos') ? src : getFallbackSrc();
   const [errorSrc, setErrorSrc] = useState<string | null>(null);
 
-  if (prevSrc !== src) {
-    setPrevSrc(src);
-    setErrorSrc(null);
-  }
-
-  const theme = getFlavorTheme(flavor, category);
-  const currentSrc = errorSrc || initialSrc;
+  const currentSrc = errorSrc || validSrc;
 
   const handleError = () => {
     const fallback = getFallbackSrc();
@@ -63,8 +54,10 @@ export default function ProductImage({
     }
   };
 
+  const theme = getFlavorTheme(flavor, category);
+
   return (
-    <div className="relative flex items-center justify-center overflow-hidden w-full h-full">
+    <div key={src} className="relative flex items-center justify-center overflow-hidden w-full h-full">
       {/* Dynamic Flavor Aura Glow */}
       {showAura && (
         <div

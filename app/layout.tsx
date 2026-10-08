@@ -16,14 +16,14 @@ const siteUrl = getSiteUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Foger Vape Distributor | Authentic Bit 35K & Switch Pro',
-    template: '%s | Foger Vape Distributor'
+    default: 'Foger Vapes US | Authentic Bit 35K & Switch Pro Distributor',
+    template: '%s | Foger Vapes US'
   },
-  description: 'Authorized distributor of authentic Foger Vape products. Shop Foger Bit 35K, Switch Pro Kits, and replacement pods. 100% genuine guaranteed with fast shipping.',
-  keywords: ['foger vape', 'foger vape flavors', 'foger', 'foggers vape', 'foger vape near me', 'foger vapes', 'foger vape refill', 'Foger Bit 35K', 'Foger Switch Pro'],
-  authors: [{ name: 'Foger Vapes Distributor' }],
-  creator: 'Foger Vapes Distributor',
-  publisher: 'Foger Vapes Distributor',
+  description: 'Authorized USA distributor of authentic Foger Vape products. Shop Foger Bit 35K, Switch Pro Kits, and replacement pods with fast US shipping.',
+  keywords: ['foger vape', 'foger vape flavors', 'foger', 'foggers vape', 'foger vape near me', 'foger vapes', 'foger vape usa', 'Foger Bit 35K', 'Foger Switch Pro'],
+  authors: [{ name: 'Foger Vapes US Distributor' }],
+  creator: 'Foger Vapes US Distributor',
+  publisher: 'Foger Vapes US Distributor',
   formatDetection: {
     email: false,
     address: false,
@@ -32,26 +32,32 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  other: {
+    'geo.region': 'US',
+    'geo.placename': 'United States',
+    'distribution': 'United States',
+    'rating': 'general',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: siteUrl,
-    siteName: 'Foger Vapes Distributor (foger-vapes.store)',
-    title: 'Foger Vapes Distributor | Authentic Bit 35K & Switch Pro',
-    description: 'Authorized distributor of authentic Foger Vape products. 100% genuine guaranteed.',
+    siteName: 'Foger Vapes US (foger-vapes.store)',
+    title: 'Foger Vapes US | Authentic Bit 35K & Switch Pro Distributor',
+    description: 'Authorized USA distributor of authentic Foger Vape products. 100% genuine guaranteed with fast US shipping.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Foger Vapes Distributor',
+        alt: 'Foger Vapes US Distributor',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Foger Vapes Distributor | Authentic Bit 35K & Switch Pro',
-    description: 'Authorized distributor of authentic Foger Vape products. 100% genuine guaranteed.',
+    title: 'Foger Vapes US | Authentic Bit 35K & Switch Pro Distributor',
+    description: 'Authorized USA distributor of authentic Foger Vape products. 100% genuine guaranteed with fast US shipping.',
     images: ['/og-image.jpg'],
   },
   robots: {
