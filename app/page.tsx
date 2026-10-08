@@ -33,7 +33,7 @@ export default function HomePage() {
             30 Bit 35K • 52 Kits • 54 Pod Flavors In Stock
           </span>
           <span>•</span>
-          <span>Fast $9 Flat Shipping</span>
+          <span>From $9.99 Shipping • Free on $200+</span>
         </div>
       </div>
 

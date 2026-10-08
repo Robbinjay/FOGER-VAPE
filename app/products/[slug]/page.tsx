@@ -272,7 +272,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </span>
               )}
               <span className="text-xs text-gray-400 font-semibold uppercase tracking-wider">
-                Tax calculated at checkout • Flat $9 shipping
+                Normal $9.99 • Free on $200+ • Same-Day & Express Available
               </span>
             </div>
             
@@ -575,7 +575,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <div className="flex flex-col items-center text-center p-3 rounded-xl bg-zinc-950/50">
                 <Truck className="w-6 h-6 text-yellow-400 mb-2" />
                 <span className="text-[11px] font-black text-white uppercase tracking-wider">Fast Dispatch</span>
-                <span className="text-[10px] text-gray-500">$9 Flat / Free $99+</span>
+                <span className="text-[10px] text-gray-500">From $9.99 / Free $200+</span>
               </div>
               <div className="flex flex-col items-center text-center p-3 rounded-xl bg-zinc-950/50">
                 <ShieldCheck className="w-6 h-6 text-yellow-400 mb-2" />

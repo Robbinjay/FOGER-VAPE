@@ -10,6 +10,19 @@ export interface OrderItem {
   puffs?: string;
 }
 
+export interface ShippingMethodDetails {
+  id: string;
+  name: string;
+  price: number;
+}
+
+export interface PaymentMethodDetails {
+  type: 'APPLE_PAY' | 'CRYPTO' | 'CHIME';
+  label: string;
+  reference?: string; // e.g. Chime tag, Crypto tx/coin, or Apple Pay authorization
+  details?: string;
+}
+
 export interface OrderDetails {
   orderNumber: string;
   createdAt: string;
@@ -17,6 +30,7 @@ export interface OrderDetails {
     firstName: string;
     lastName: string;
     email: string;
+    phone: string;
     newsletter?: boolean;
   };
   shippingAddress: {
@@ -24,7 +38,11 @@ export interface OrderDetails {
     city: string;
     state: string;
     zip: string;
+    country?: string;
+    orderNotes?: string;
   };
+  shippingMethod: ShippingMethodDetails;
+  paymentMethod: PaymentMethodDetails;
   items: OrderItem[];
   pricing: {
     subtotal: number;
@@ -120,7 +138,7 @@ function generateClientEmailHtml(order: OrderDetails, storeName: string): string
         Thank you for your order, ${order.customer.firstName}!
       </h2>
       <p style="color: #4b5563; font-size: 14px; line-height: 1.6; margin: 0 0 24px 0;">
-        We have received your order <strong>#${order.orderNumber}</strong> and it is now being processed. Below is a summary of your purchased items and delivery address.
+        We have received your order <strong>#${order.orderNumber}</strong>. Our logistics team is preparing your package according to your selected shipping option.
       </p>
 
       <!-- Order Metadata Box -->
@@ -135,8 +153,16 @@ function generateClientEmailHtml(order: OrderDetails, storeName: string): string
             <td style="text-align: right; font-weight: 600; color: #111827; padding: 4px 0;">${order.createdAt}</td>
           </tr>
           <tr>
-            <td style="color: #6b7280; padding: 4px 0;">Delivery Status:</td>
-            <td style="text-align: right; font-weight: 700; color: #059669; padding: 4px 0;">Processing • Fast Dispatch</td>
+            <td style="color: #6b7280; padding: 4px 0;">Shipping Speed:</td>
+            <td style="text-align: right; font-weight: 700; color: #d97706; padding: 4px 0;">
+              ${order.shippingMethod.name}
+            </td>
+          </tr>
+          <tr>
+            <td style="color: #6b7280; padding: 4px 0;">Payment Option:</td>
+            <td style="text-align: right; font-weight: 700; color: #059669; padding: 4px 0;">
+              ${order.paymentMethod.label} ${order.paymentMethod.reference ? `(${order.paymentMethod.reference})` : ''}
+            </td>
           </tr>
         </table>
       </div>
@@ -166,9 +192,9 @@ function generateClientEmailHtml(order: OrderDetails, storeName: string): string
             <td style="text-align: right; font-weight: 600; color: #111827; padding: 6px 0;">$${order.pricing.subtotal.toFixed(2)}</td>
           </tr>
           <tr>
-            <td style="color: #6b7280; padding: 6px 0;">Shipping:</td>
+            <td style="color: #6b7280; padding: 6px 0;">${order.shippingMethod.name}:</td>
             <td style="text-align: right; font-weight: 600; color: #111827; padding: 6px 0;">
-              ${order.pricing.shipping === 0 ? '<span style="color: #059669; font-weight: 700;">FREE</span>' : `$${order.pricing.shipping.toFixed(2)}`}
+              ${order.pricing.shipping === 0 ? '<span style="color: #059669; font-weight: 700;">FREE (Orders $200+)</span>' : `$${order.pricing.shipping.toFixed(2)}`}
             </td>
           </tr>
           <tr>
@@ -190,14 +216,16 @@ function generateClientEmailHtml(order: OrderDetails, storeName: string): string
       </h3>
       <div style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; font-size: 14px; color: #374151; line-height: 1.6; margin-bottom: 24px;">
         <strong>${order.customer.firstName} ${order.customer.lastName}</strong><br/>
+        Phone: ${order.customer.phone}<br/>
         ${order.shippingAddress.address}<br/>
         ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zip}<br/>
-        United States
+        ${order.shippingAddress.country || 'United States'}
+        ${order.shippingAddress.orderNotes ? `<br/><br/><em>Notes: ${order.shippingAddress.orderNotes}</em>` : ''}
       </div>
 
       <!-- Adult Signature Notice -->
       <div style="background-color: #fffbeb; border-left: 4px solid #facc15; padding: 12px 16px; margin-bottom: 24px; font-size: 12px; color: #92400e; border-radius: 0 8px 8px 0;">
-        <strong>Age Verification Compliance:</strong> In accordance with federal regulations, an adult signature (21+) with valid ID is required upon carrier delivery.
+        <strong>Age Verification Compliance:</strong> In accordance with federal and local regulations, an adult signature (21+) with government ID is required upon carrier delivery.
       </div>
 
       <!-- Support Footer -->
@@ -219,6 +247,8 @@ function generateClientEmailHtml(order: OrderDetails, storeName: string): string
 }
 
 function generateAdminEmailHtml(order: OrderDetails, storeName: string): string {
+  const isSameDay = order.shippingMethod.id === 'same-day';
+
   const itemsHtml = order.items
     .map(
       (item) => `
@@ -249,15 +279,15 @@ function generateAdminEmailHtml(order: OrderDetails, storeName: string): string 
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #111827; margin: 0; padding: 24px; color: #e5e7eb;">
   <div style="max-width: 650px; margin: 0 auto; background: #1f2937; border-radius: 16px; overflow: hidden; border: 1px solid #374151;">
     <!-- Alert Banner -->
-    <div style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 24px; text-align: center; color: #000000;">
+    <div style="background: ${isSameDay ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 'linear-gradient(135deg, #f59e0b, #d97706)'}; padding: 24px; text-align: center; color: #ffffff;">
       <span style="display: inline-block; background-color: #000000; color: #facc15; font-size: 11px; font-weight: 900; text-transform: uppercase; padding: 4px 12px; border-radius: 9999px; letter-spacing: 1.5px; margin-bottom: 8px;">
-        ⚡ NEW ORDER RECEIVED
+        ${isSameDay ? '🚨 URGENT: SAME DAY SHIPPING ORDER' : '⚡ NEW ORDER RECEIVED'}
       </span>
-      <h1 style="margin: 0; font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">
+      <h1 style="margin: 0; font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; color: #ffffff;">
         Order #${order.orderNumber}
       </h1>
-      <p style="margin: 6px 0 0 0; font-size: 16px; font-weight: 700;">
-        Total: $${order.pricing.total.toFixed(2)} USD
+      <p style="margin: 6px 0 0 0; font-size: 16px; font-weight: 700; color: #fef08a;">
+        Total: $${order.pricing.total.toFixed(2)} USD • ${order.shippingMethod.name}
       </p>
     </div>
 
@@ -276,22 +306,41 @@ function generateAdminEmailHtml(order: OrderDetails, storeName: string): string 
             <div style="color: #60a5fa; font-size: 13px; margin-top: 4px;">
               <a href="mailto:${order.customer.email}" style="color: #60a5fa; text-decoration: none;">${order.customer.email}</a>
             </div>
+            <div style="color: #e5e7eb; font-size: 13px; margin-top: 4px;">
+              Phone: <strong>${order.customer.phone}</strong>
+            </div>
             <div style="color: #9ca3af; font-size: 11px; margin-top: 8px;">
-              Marketing opted-in: ${order.customer.newsletter ? 'Yes' : 'No'}
+              Marketing: ${order.customer.newsletter ? 'Opted-in' : 'No'}
             </div>
           </td>
           <td style="width: 50%; vertical-align: top; background-color: #111827; padding: 16px; border-radius: 12px; border: 1px solid #374151;">
             <div style="color: #9ca3af; font-size: 11px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 8px;">
-              Shipping Address
+              Shipping & Method
+            </div>
+            <div style="color: #facc15; font-weight: 800; font-size: 13px; margin-bottom: 6px;">
+              📦 ${order.shippingMethod.name} ($${order.pricing.shipping.toFixed(2)})
             </div>
             <div style="color: #e5e7eb; font-size: 13px; line-height: 1.5;">
               ${order.shippingAddress.address}<br/>
               ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zip}<br/>
-              <strong>United States</strong>
+              <strong>${order.shippingAddress.country || 'United States'}</strong>
+              ${order.shippingAddress.orderNotes ? `<br/><br/><span style="color: #f87171;">Notes: ${order.shippingAddress.orderNotes}</span>` : ''}
             </div>
           </td>
         </tr>
       </table>
+
+      <!-- Payment Method Block -->
+      <div style="background-color: #111827; padding: 16px; border-radius: 12px; border: 1px solid #374151; margin-bottom: 24px;">
+        <div style="color: #9ca3af; font-size: 11px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 6px;">
+          Payment Method Details
+        </div>
+        <div style="font-size: 14px; font-weight: 700; color: #ffffff;">
+          ${order.paymentMethod.label}
+        </div>
+        ${order.paymentMethod.reference ? `<div style="font-size: 13px; color: #facc15; margin-top: 4px; font-family: monospace;">Ref/Account: ${order.paymentMethod.reference}</div>` : ''}
+        ${order.paymentMethod.details ? `<div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">${order.paymentMethod.details}</div>` : ''}
+      </div>
 
       <!-- Order Items Table -->
       <div style="color: #facc15; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 8px;">
@@ -318,7 +367,7 @@ function generateAdminEmailHtml(order: OrderDetails, storeName: string): string 
             <td style="text-align: right; color: #ffffff; font-weight: 600;">$${order.pricing.subtotal.toFixed(2)}</td>
           </tr>
           <tr>
-            <td style="padding: 4px 0;">Shipping Fee:</td>
+            <td style="padding: 4px 0;">Shipping (${order.shippingMethod.name}):</td>
             <td style="text-align: right; color: #ffffff; font-weight: 600;">$${order.pricing.shipping.toFixed(2)}</td>
           </tr>
           <tr>
@@ -404,7 +453,7 @@ export async function sendZohoOrderNotifications(
       replyTo: user,
       subject: `Order Confirmation #${order.orderNumber} - Foger Vapes`,
       html: generateClientEmailHtml(order, fromName),
-      text: `Thank you for your order #${order.orderNumber}, ${order.customer.firstName}!\n\nTotal: $${order.pricing.total.toFixed(2)}\nShipping to: ${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zip}\n\nWe will notify you once your package ships.`,
+      text: `Thank you for your order #${order.orderNumber}, ${order.customer.firstName}!\n\nTotal: $${order.pricing.total.toFixed(2)}\nShipping Method: ${order.shippingMethod.name}\nPayment: ${order.paymentMethod.label}\nShipping to: ${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zip}\n\nWe will notify you once your package ships.`,
     };
 
     await transporter.sendMail(clientMailOptions);
@@ -418,13 +467,14 @@ export async function sendZohoOrderNotifications(
   // 2. Send to Admin
   if (adminEmail) {
     try {
+      const isUrgent = order.shippingMethod.id === 'same-day';
       const adminMailOptions = {
         from: fromHeader,
         to: adminEmail,
         replyTo: order.customer.email,
-        subject: `⚡ [NEW ORDER] #${order.orderNumber} ($${order.pricing.total.toFixed(2)}) - ${order.customer.firstName} ${order.customer.lastName}`,
+        subject: `${isUrgent ? '🚨 [SAME DAY SHIPPING] ' : '⚡ [NEW ORDER] '}#${order.orderNumber} ($${order.pricing.total.toFixed(2)}) - ${order.customer.firstName} ${order.customer.lastName} (${order.paymentMethod.label})`,
         html: generateAdminEmailHtml(order, fromName),
-        text: `New order received #${order.orderNumber} for $${order.pricing.total.toFixed(2)} from ${order.customer.firstName} ${order.customer.lastName} (${order.customer.email}).`,
+        text: `New order received #${order.orderNumber} for $${order.pricing.total.toFixed(2)} from ${order.customer.firstName} ${order.customer.lastName} (${order.customer.email}). Shipping: ${order.shippingMethod.name}. Payment: ${order.paymentMethod.label}. Phone: ${order.customer.phone}.`,
       };
 
       await transporter.sendMail(adminMailOptions);
