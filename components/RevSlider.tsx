@@ -247,9 +247,11 @@ export function RevSlider() {
             <Image
               src={currentSlide.image}
               alt={currentSlide.title}
-              fill
-              className="object-cover object-center"
+              width={1920}
+              height={1080}
+              unoptimized
               priority
+              className="absolute inset-0 w-full h-full object-cover object-center"
               referrerPolicy="no-referrer"
               sizes="100vw"
             />

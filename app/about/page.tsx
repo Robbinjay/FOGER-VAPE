@@ -44,8 +44,10 @@ export default function AboutPage() {
             <Image 
               src="/images/foger-bit-35k.jpg" 
               alt="Authentic Foger Vape Reseller" 
-              fill 
-              className="object-cover mix-blend-luminosity opacity-80"
+              width={800}
+              height={600}
+              unoptimized
+              className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-80"
               referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/90 via-black/40 to-transparent" />

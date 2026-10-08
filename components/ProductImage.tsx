@@ -27,7 +27,6 @@ export default function ProductImage({
   subCategory,
   width = 600,
   height = 600,
-  fill = false,
   className = '',
   priority = false,
   sizes,
@@ -43,14 +42,12 @@ export default function ProductImage({
   };
 
   const validSrc = src && !src.includes('picsum.photos') ? src : getFallbackSrc();
-  const [errorSrc, setErrorSrc] = useState<string | null>(null);
-
-  const currentSrc = errorSrc || validSrc;
+  const [currentSrc, setCurrentSrc] = useState<string>(validSrc);
 
   const handleError = () => {
     const fallback = getFallbackSrc();
     if (currentSrc !== fallback) {
-      setErrorSrc(fallback);
+      setCurrentSrc(fallback);
     }
   };
 
@@ -74,6 +71,7 @@ export default function ProductImage({
         width={width}
         height={height}
         priority={priority}
+        unoptimized
         sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
         onError={handleError}
         className={`w-full h-full object-contain transition-transform duration-500 z-10 ${className}`}

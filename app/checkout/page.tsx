@@ -971,9 +971,10 @@ export default function CheckoutPage() {
                       <Image 
                         src={item.image} 
                         alt={item.name}
-                        fill
-                        className="object-contain p-1"
-                        sizes="64px"
+                        width={64}
+                        height={64}
+                        unoptimized
+                        className="w-full h-full object-contain p-1"
                         referrerPolicy="no-referrer"
                       />
                       <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-yellow-400 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow">

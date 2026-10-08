@@ -93,9 +93,10 @@ export function CartDrawer() {
                         <Image 
                           src={item.image} 
                           alt={item.name}
-                          fill
-                          className="object-contain p-1"
-                          sizes="96px"
+                          width={96}
+                          height={96}
+                          unoptimized
+                          className="w-full h-full object-contain p-1"
                           referrerPolicy="no-referrer"
                         />
                       </div>
