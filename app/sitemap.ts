@@ -1,9 +1,20 @@
 import { MetadataRoute } from 'next';
 import { products } from '@/lib/data';
+import { headers } from 'next/headers';
 import { getSiteUrl } from '@/lib/site-config';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = getSiteUrl();
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  let baseUrl = getSiteUrl();
+  try {
+    const headersList = await headers();
+    const host = headersList.get('host');
+    const proto = headersList.get('x-forwarded-proto') || 'https';
+    if (host) {
+      baseUrl = `${proto}://${host}`;
+    }
+  } catch {
+    // fallback to default site url
+  }
 
   const productUrls = products.map((product) => ({
     url: `${baseUrl}/products/${product.slug}`,
