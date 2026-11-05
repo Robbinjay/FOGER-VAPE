@@ -1,13 +1,47 @@
-import { Metadata } from 'next';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Contact Us | Authorized Foger Vape Distributor Support',
-  description: 'Need help with your Foger Bit 35K or Switch Pro order? Contact our support team for wholesale inquiries, product support, and general questions. Your trusted source for authentic foger vapes.',
-  keywords: ['foger vape', 'foger support', 'foger wholesale', 'foger distributor contact', 'foger vape near me'],
-};
+import React, { useState } from 'react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    message: '',
+    website: '', // Honeypot field for anti-spam
+  });
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccessMessage('');
+    setErrorMessage('');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to send message.');
+      }
+
+      setSuccessMessage(data.message || 'Message sent successfully via Zoho Mail!');
+      setFormData({ firstName: '', lastName: '', email: '', message: '', website: '' });
+    } catch (err: any) {
+      setErrorMessage(err.message || 'An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
@@ -39,27 +73,86 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div className="bg-zinc-950 p-10 rounded-3xl border border-white/10">
             <h2 className="text-3xl font-black mb-8 uppercase tracking-tight">Send a Message</h2>
-            <form className="space-y-6">
+
+            {successMessage && (
+              <div className="mb-6 p-4 bg-emerald-950/80 border border-emerald-500/50 rounded-xl flex items-center gap-3 text-emerald-400">
+                <CheckCircle2 className="w-5 h-5 shrink-0" />
+                <span className="text-sm font-bold">{successMessage}</span>
+              </div>
+            )}
+
+            {errorMessage && (
+              <div className="mb-6 p-4 bg-red-950/80 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-400">
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <span className="text-sm font-bold">{errorMessage}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Hidden Honeypot Field for Anti-Spam (Bots will fill this, humans won't see it) */}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  value={formData.website}
+                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-widest">First Name</label>
-                  <input type="text" id="firstName" className="w-full px-5 py-4 rounded-xl bg-black border border-white/10 focus:border-[#facc15] focus:ring-1 focus:ring-[#facc15] outline-none text-white transition-all" />
+                  <input
+                    type="text"
+                    id="firstName"
+                    required
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                    className="w-full px-5 py-4 rounded-xl bg-black border border-white/10 focus:border-[#facc15] focus:ring-1 focus:ring-[#facc15] outline-none text-white transition-all"
+                  />
                 </div>
                 <div>
                   <label htmlFor="lastName" className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-widest">Last Name</label>
-                  <input type="text" id="lastName" className="w-full px-5 py-4 rounded-xl bg-black border border-white/10 focus:border-[#facc15] focus:ring-1 focus:ring-[#facc15] outline-none text-white transition-all" />
+                  <input
+                    type="text"
+                    id="lastName"
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                    className="w-full px-5 py-4 rounded-xl bg-black border border-white/10 focus:border-[#facc15] focus:ring-1 focus:ring-[#facc15] outline-none text-white transition-all"
+                  />
                 </div>
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-widest">Email Address</label>
-                <input type="email" id="email" className="w-full px-5 py-4 rounded-xl bg-black border border-white/10 focus:border-[#facc15] focus:ring-1 focus:ring-[#facc15] outline-none text-white transition-all" />
+                <input
+                  type="email"
+                  id="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full px-5 py-4 rounded-xl bg-black border border-white/10 focus:border-[#facc15] focus:ring-1 focus:ring-[#facc15] outline-none text-white transition-all"
+                />
               </div>
               <div>
                 <label htmlFor="message" className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-widest">Message</label>
-                <textarea id="message" rows={5} className="w-full px-5 py-4 rounded-xl bg-black border border-white/10 focus:border-[#facc15] focus:ring-1 focus:ring-[#facc15] outline-none text-white transition-all resize-none"></textarea>
+                <textarea
+                  id="message"
+                  rows={5}
+                  required
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="w-full px-5 py-4 rounded-xl bg-black border border-white/10 focus:border-[#facc15] focus:ring-1 focus:ring-[#facc15] outline-none text-white transition-all resize-none"
+                ></textarea>
               </div>
-              <button type="submit" className="w-full py-5 bg-[#facc15] text-black rounded-xl font-black text-lg hover:bg-yellow-300 transition-all uppercase tracking-widest flex items-center justify-center gap-2">
-                Send Message <Send className="w-5 h-5" />
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-5 bg-[#facc15] text-black rounded-xl font-black text-lg hover:bg-yellow-300 transition-all uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {loading ? 'Sending via Zoho Mail...' : <>Send Message <Send className="w-5 h-5" /></>}
               </button>
             </form>
           </div>

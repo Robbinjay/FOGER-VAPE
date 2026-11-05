@@ -1,10 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendZohoOrderNotifications, OrderDetails } from '@/lib/zoho-mail';
+import { checkAntiSpam } from '@/lib/anti-spam';
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { customer, shippingAddress, items, pricing, shippingMethod, paymentMethod } = body;
+    const { customer, shippingAddress, items, pricing, shippingMethod, paymentMethod, website } = body;
+
+    // Anti-spam protection check
+    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
+    const combinedText = `${customer?.firstName || ''} ${customer?.lastName || ''} ${shippingAddress?.orderNotes || ''}`;
+    const antiSpamCheck = checkAntiSpam(clientIp, customer?.email, combinedText, website);
+    
+    if (antiSpamCheck.isSpam) {
+      return NextResponse.json(
+        { success: false, error: `Submission blocked by anti-spam security filter: ${antiSpamCheck.reason}` },
+        { status: 400 }
+      );
+    }
 
     // Validate minimum order constraint ($100.00)
     const subtotal = Number(pricing?.subtotal) || 0;

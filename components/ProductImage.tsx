@@ -27,6 +27,7 @@ export default function ProductImage({
   subCategory,
   width = 600,
   height = 600,
+  fill = false,
   className = '',
   priority = false,
   sizes,
@@ -65,18 +66,30 @@ export default function ProductImage({
         />
       )}
 
-      <Image
-        src={currentSrc}
-        alt={alt}
-        width={width}
-        height={height}
-        priority={priority}
-        unoptimized
-        sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
-        onError={handleError}
-        className={`w-full h-full object-contain transition-transform duration-500 z-10 ${className}`}
-        referrerPolicy="no-referrer"
-      />
+      {fill ? (
+        <Image
+          src={currentSrc}
+          alt={alt}
+          fill
+          priority={priority}
+          sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+          onError={handleError}
+          className={`object-contain transition-transform duration-500 z-10 ${className}`}
+          referrerPolicy="no-referrer"
+        />
+      ) : (
+        <Image
+          src={currentSrc}
+          alt={alt}
+          width={width}
+          height={height}
+          priority={priority}
+          sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+          onError={handleError}
+          className={`w-full h-full object-contain transition-transform duration-500 z-10 ${className}`}
+          referrerPolicy="no-referrer"
+        />
+      )}
     </div>
   );
 }

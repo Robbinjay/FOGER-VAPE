@@ -68,7 +68,7 @@ export interface EmailDispatchResult {
  * Host: smtppro.zoho.com (for Zoho Workplace/organization domains) or smtp.zoho.com (personal)
  * Port: 465 (SSL) or 587 (TLS)
  */
-function getZohoConfig() {
+export function getZohoConfig() {
   let user = (process.env.ZOHO_MAIL_USER || '').trim();
   if (user.toLowerCase().includes('foger-vapes.org')) {
     user = user.replace(/foger-vapes\.org/gi, 'foger-vapes.store');
