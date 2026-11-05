@@ -9,12 +9,13 @@ export async function POST(req: NextRequest) {
 
     // Anti-spam protection check
     const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
+    const userAgent = req.headers.get('user-agent') || undefined;
     const combinedText = `${customer?.firstName || ''} ${customer?.lastName || ''} ${shippingAddress?.orderNotes || ''}`;
-    const antiSpamCheck = checkAntiSpam(clientIp, customer?.email, combinedText, website);
+    const antiSpamCheck = checkAntiSpam(clientIp, customer?.email, userAgent, combinedText, body.website, body.formLoadTime);
     
     if (antiSpamCheck.isSpam) {
       return NextResponse.json(
-        { success: false, error: `Submission blocked by anti-spam security filter: ${antiSpamCheck.reason}` },
+        { success: false, error: `Submission blocked by CleanTalk SpamFirewall: ${antiSpamCheck.reason}` },
         { status: 400 }
       );
     }

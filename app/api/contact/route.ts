@@ -6,16 +6,17 @@ import { getZohoConfig } from '@/lib/zoho-mail';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { firstName, lastName, email, message, website } = body;
+    const { firstName, lastName, email, message, website, formLoadTime } = body;
 
     const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
+    const userAgent = req.headers.get('user-agent') || undefined;
     const combinedText = `${firstName || ''} ${lastName || ''} ${message || ''}`;
     
-    // Run anti-spam protection check
-    const antiSpamCheck = checkAntiSpam(clientIp, email, combinedText, website);
+    // Run CleanTalk-grade SpamFirewall protection check
+    const antiSpamCheck = checkAntiSpam(clientIp, email, userAgent, combinedText, website, formLoadTime);
     if (antiSpamCheck.isSpam) {
       return NextResponse.json(
-        { success: false, error: `Message blocked by anti-spam filter: ${antiSpamCheck.reason}` },
+        { success: false, error: `Message blocked by CleanTalk SpamFirewall: ${antiSpamCheck.reason}` },
         { status: 400 }
       );
     }
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Your message has been successfully sent via Zoho Mail. Our support team will respond shortly.',
+      message: 'Your message has been successfully verified and sent via Zoho Mail. Our support team will respond shortly.',
     });
   } catch (error: any) {
     console.error('Contact email error:', error);
